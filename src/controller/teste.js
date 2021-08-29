@@ -4,18 +4,29 @@ import Banco from '../Banco/connect'
 const router = express.Router()
 
 
- // rota de teste
- router.get('/server',(req,res)=>{
+ // rota de teste servidor
+ router.get('/testeserver',(req,res)=>{
     res.json('Acessado backend!!!')
   })
-router.get('/banco', async (req, res, ) => {
-    const teste=Banco.testaconexao()
-    if(teste){
-        res.json ('Banco Acessado')
+
+// rota de teste banco de dados
+router.get('/testeconexaobanco', async (req, res, ) => {
+    const banco= await Banco.session()
+    const result = await banco.query({
+        rowMode : 'array',
+        text: 'Select descricao from Login.Conexao',
+      })
+    if(result){      
+        res.json ("status: " + result.rows)
     }
     else{
-        res.jason(teste.err)
+        res.jason("Erro: "+ banco.err)
     }
+})
+
+ // rota de atualização de banco de dados.
+router.get('/atualizabanco',(req,res)=>{
+  
 })
 
 
