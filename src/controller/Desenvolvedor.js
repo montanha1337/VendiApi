@@ -8,7 +8,8 @@ const router = express.Router()
 
  // rota de teste servidor
  router.get('/testeserver',(req,res)=>{
-    res.json('Acessado backend!!!')
+    const descricao ='Acessado backend!!!'
+    res.json([{descricao}])
   })
 
 // rota de teste banco de dados
@@ -19,29 +20,23 @@ router.get('/testeconexaobanco', async (req, res, ) => {
       text: "SELECT count(nspname) FROM pg_catalog.pg_namespace;",
       })
 
-    if(result.rows==7){      
-      const conexao=Funcao.verificaconexao()
-      const texto = conexao
-      res.json("status: Conexao Realizada")
+    if(result.rows==7){    
+      const texto= await Funcao.verificaconexao(1)
+      res.json(texto)
  
     }
     else{
       Funcao.atualizabanco()
-      const conexao2=Funcao.verificaconexao()
-      res.json("status: Banco Atualizado")
+      const conexao= await Funcao.verificaconexao(2)
+      res.json(conexao)
     }
-})
-
- // rota de atualização de banco de dados.
-router.get('/atualizabanco',async(req,res)=>{
-  Funcao.atualizabanco()
-  res.status(201).json("Atualizado")
 })
 
  // rota de deletar de banco de dados.
  router.get('/deletabanco',async(req,res)=>{
+  const conexao =await Funcao.verificaconexao(3)
   Database.deletaschema()
-  res.json('Schema Classifipatos Deleted')
+  res.json(conexao)
 })
 
 

@@ -10,12 +10,23 @@ function gerajwt(iduser){
 
 function verificajwt(token){
     const verificado = Jwt.verify(token,Chave.secreto, (err, decoded) =>{
-        if(err) 
+        if(err) {
             return {Erro:err}
+        }
         return decoded.iduser
     } )
     return verificado
 }
+function Atualizajwt(token,iduser){
+    const atualizado = verificajwt(token)
+    if(atualizado>0){
+        return Atualizado
+    }else{
+        atualizado=gerajwt(iduser)
+        return
+    }
+}
+
 async function atualizabanco(){
     const {rows} = await Atualiza.criaconexao()
     await Atualiza.criauser()
@@ -24,12 +35,14 @@ async function atualizabanco(){
     return texto
 }
 
-async function verificaconexao(){
+async function verificaconexao(mensagem){
     const banco= await Chave.session()
     const result = await banco.query({
-        rowMode : 'array',
-        text: "Select descricao from ClassifiPatos.Conexao con where con.id_conexao = 1",
-      })
-      return result.rows
+        text: "Select descricao from ClassifiPatos.Conexao con where con.id_conexao = $1",
+        },
+        [mensagem])
+
+    const texto = result.rows
+      return texto
     }
-module.exports = { gerajwt, verificajwt, atualizabanco, verificaconexao}
+module.exports = { gerajwt, verificajwt,Atualizajwt, atualizabanco, verificaconexao}
