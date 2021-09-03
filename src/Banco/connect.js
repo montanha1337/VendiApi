@@ -1,18 +1,30 @@
-import mongoose from 'mongoose';
+import {Pool} from 'pg'
 
 // criar conexão com a base de dados
-//  conexão com o banco id:root senha:admin
-const connection = mongoose.connect('mongodb+srv://root:admin@cluster0.7pcvy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{
-       useNewUrlParser: true,
-       useUnifiedTopology: true,
-     });
+// deve-se ao instalar o banco de dados colocar #abc123# no password
 
-//Funçao para testar a conexão
+const connection = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'Vendi',
+  password: '#abc123#',
+  port: 5432,
+  connectionTimeoutMillis: 1500
+})
 
-async function testaconexao() {
-  const teste = await connection.connect();
-  return 'Banco conectado!';
+//Funçao para estabelecer a conexão
+
+ var conexao
+
+async function session() {
+  if(conexao){
+       return conexao
+  }else{
+   conexao = await connection.connect();
+   return conexao
+  }
 }
+const secreto = 'Desenvolvemosfuturo'
 
 
-module.exports = { testaconexao, connection }
+module.exports = { session, connection, secreto }
