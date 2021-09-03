@@ -38,11 +38,18 @@ async function atualizabanco(){
 async function verificaconexao(mensagem){
     const banco= await Chave.session()
     const result = await banco.query({
-        text: "Select descricao from ClassifiPatos.Conexao con where con.id_conexao = $1",
+        text: "Select descricao from Vendi.Conexao con where con.id_conexao = $1",
         },
         [mensagem])
 
     const texto = result.rows
       return texto
     }
-module.exports = { gerajwt, verificajwt,Atualizajwt, atualizabanco, verificaconexao}
+    async function enviaremail(email,nome,mensagem){
+
+        require("../config/configemail")(email, nome, mensagem)
+            .then(response => res.json(response))
+            .catch(error => res.json(error));
+            return "Deu certo"
+    }
+module.exports = { gerajwt, verificajwt,Atualizajwt, atualizabanco, verificaconexao, enviaremail}

@@ -13,7 +13,7 @@ router.post('/login', async (req, res, ) => {
     const banco= await Banco.session()
     const iduser = await banco.query({
         rowMode : 'array',
-        text: 'SELECT id_user FROM classifipatos.user u where u.email= $1 and u.senha= $2;',
+        text: 'SELECT id_user FROM Vendi.user u where u.email= $1 and u.senha= $2;',
       },[email, senha])
 
     if(iduser.rows>0){
@@ -35,7 +35,7 @@ router.post('/cadastro', async (req, res, ) => {
     const banco= await Banco.session()
     const user = await banco.query({
         rowMode : 'array',
-        text: 'SELECT id_user FROM classifipatos.user u where u.email= $1 and u.senha= $2;',
+        text: 'SELECT id_user FROM Vendi.user u where u.email= $1 and u.senha= $2;',
       },[email, senha])
 
     if(user.rows>0){
@@ -44,12 +44,12 @@ router.post('/cadastro', async (req, res, ) => {
     }else{    
         await banco.query({
             rowMode : 'array',
-            text: "INSERT INTO ClassifiPatos.user(nome,email, senha)VALUES ($1,$2,$3);",
+            text: "INSERT INTO Vendi.user(nome,email, senha)VALUES ($1,$2,$3);",
         },[nome,email, senha])
 
          const iduser = await banco.query({
             rowMode : 'array',
-            text: 'SELECT id_user FROM classifipatos.user u where u.email= $1 and u.senha= $2;',
+            text: 'SELECT id_user FROM Vendi.user u where u.email= $1 and u.senha= $2;',
         },[email, senha])
 
         if(iduser.rows>0){

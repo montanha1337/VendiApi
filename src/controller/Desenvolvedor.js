@@ -1,7 +1,7 @@
-import express from 'express'
-import Banco from '../Banco/connect'
-import Funcao from './functions'
-import Database from '../Banco/migrations/database'
+import express  from  'express'
+import Banco    from  '../Banco/connect'
+import Funcao   from  './functions'
+import Database from  '../Banco/migrations/database'
 
 const router = express.Router()
 
@@ -38,6 +38,21 @@ router.get('/testeconexaobanco', async (req, res, ) => {
   Database.deletaschema()
   res.json(conexao)
 })
+
+//testa email
+
+router.get('/enviaemail',async(req,res)=>{
+      const nome = req.body.Assunto;
+      const email = req.body.email;
+      const mensagem = req.body.Texto;
+      
+      const resemail = Funcao.enviaremail(email, nome,mensagem)
+
+      res.send(200).json(resemail)
+
+  })
+
+
 
 
 
