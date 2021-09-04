@@ -25,13 +25,8 @@ module.exports = (email, nome, mensagem) => {
         subject: nome, // Subject line
         text: mensagem, // plain text body
       });
-    
-      console.log("Message sent: %s", info.messageId);
-      // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-    
-      // Preview only available when sending through an Ethereal account
-     return nodemailer.getTestMessageUrl(info)
-      // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+      return info.messageId
+      // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com
     }
     
     main().catch(console.error)}

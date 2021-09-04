@@ -1,6 +1,11 @@
 import Jwt from 'jsonwebtoken'
 import Chave from '../Banco/connect'
 import Atualiza from '../Banco/migrations/database'
+import bcrypt from 'bcrypt'
+
+var salt = bcrypt.genSaltSync(10)
+
+
 
 
 function gerajwt(iduser){
@@ -37,19 +42,30 @@ async function atualizabanco(){
 
 async function verificaconexao(mensagem){
     const banco= await Chave.session()
-    const result = await banco.query({
-        text: "Select descricao from Vendi.Conexao con where con.id_conexao = $1",
-        },
-        [mensagem])
+    const result = await banco.query("Select descricao from Vendi.Conexao con where con.id_conexao = $1",[mensagem])
 
-    const texto = result.rows
+    const texto = result.rows[0]
       return texto
     }
+
+    //para enviar email
     async function enviaremail(email,nome,mensagem){
 
-        require("../config/configemail")(email, nome, mensagem)
-            .then(response => res.json(response))
-            .catch(error => res.json(error));
-            return "Deu certo"
+        const emailrest= await require("../config/configemail")(email, nome, mensagem)
+            return emailrest
     }
-module.exports = { gerajwt, verificajwt,Atualizajwt, atualizabanco, verificaconexao, enviaremail}
+    // Função criptografar senha
+    // para criptografar true
+    async function cripto(senhauser){
+        for (let saltRounds = 10; saltRounds <= 15; saltRounds++) { 
+            var senhaParaSalvar = bcrypt.hashSync(senhauser, salt)
+          }
+          return senhaParaSalvar
+        }
+    //Função  para comparar as senhas
+    async function compare(password,senhaBanco){
+        const resulth= bcrypt.compare(password, senhaBanco);
+        return resulth
+    }
+
+module.exports = { gerajwt, verificajwt,Atualizajwt, atualizabanco, verificaconexao, enviaremail,cripto, compare}
