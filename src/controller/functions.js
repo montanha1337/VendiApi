@@ -1,16 +1,15 @@
 import Jwt from 'jsonwebtoken'
 import Chave from '../Banco/connect'
 import Atualiza from '../Banco/migrations/database'
+import Consulta from '../Banco/migrations/consulta'
+import Cadastro from '../Banco/migrations/insert'
 import EnvioEmail from '../config/configemail'
 import bcrypt from 'bcrypt'
 
 var salt = bcrypt.genSaltSync(10)
 
-
-
-//
 function gerajwt(iduser){
-    const token = Jwt.sign({iduser}, Chave.secreto, {expiresIn: 300 });
+    const token = Jwt.sign({iduser}, Chave.secreto, {expiresIn: 1000 });
     return token
 }
 
@@ -25,18 +24,23 @@ function verificajwt(token){
 }
 function Atualizajwt(token){
     const atualizado = verificajwt(token)
-    if(atualizado>0){
-        return Atualizado
-    }else{
-        atualizado=gerajwt(iduser)
-        return
-    }
+        atualizado=gerajwt(atualizado)
+        return atualizado
 }
 
 async function atualizabanco(){
     const {rows} = await Atualiza.criaconexao()
     await Atualiza.criauser()
     await Atualiza.criapessoa()
+    await Atualiza.criatelefone()
+    await Atualiza.criaendereco()
+    await Atualiza.criavendedor()
+    await Atualiza.criacategoria()
+    await Atualiza.criaanuncio()
+    await Atualiza.criafoto()
+    await Atualiza.criaentrega()
+    await Atualiza.criaformadepagamento()
+    await Atualiza.crianegociacao()
     const texto = rows
     return texto
 }

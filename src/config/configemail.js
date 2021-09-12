@@ -19,7 +19,6 @@ async function email(email, nome, mensagem){
         subject: nome, // Subject line
         text: mensagem, // plain text body
       });
-      ("Message sent: %s", info.messageId);
       return ('Message sent successfully as '+info.messageId)
       // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com
     }
