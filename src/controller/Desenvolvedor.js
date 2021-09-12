@@ -7,13 +7,13 @@ const router = express.Router()
 
 
  // rota de teste servidor
- router.get('/testeserver',(req,res)=>{
+ router.get('/testeServer',(req,res)=>{
     const descricao ='Acessado backend!!!'
     res.json({descricao})
   })
 
 // rota de teste banco de dados
-router.get('/testeconexaobanco', async (req, res, ) => {
+router.get('/testeConexaoBanco', async (req, res, ) => {
     const banco= await Banco.session()
     const result = await banco.query("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
 
@@ -29,7 +29,7 @@ router.get('/testeconexaobanco', async (req, res, ) => {
     }
 })
  // rota de deletar de banco de dados.
- router.get('/deletabanco',async(req,res)=>{
+ router.get('/deletaBanco',async(req,res)=>{
   const banco= await Banco.session()
   const result = await banco.query("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
 
@@ -41,13 +41,13 @@ router.get('/testeconexaobanco', async (req, res, ) => {
   }
 })
 //testa o envio de email
-router.get('/enviaemail',async(req,res)=>{
-      const nome = req.body.Assunto;
+router.get('/enviaEmail',async(req,res)=>{
+      const nome = req.body.assunto;
       const email = req.body.email;
-      const mensagem = req.body.Texto;
+      const mensagem = req.body.texto;
       
-     const enviaremail = Funcao.enviaremail(email, nome,mensagem)
-     res.json('Email enviado')
+     const enviarEmail = Funcao.enviaremail(email, nome,mensagem)
+     res.send(200).json({enviarEmail})
 
   })
 module.exports = router
