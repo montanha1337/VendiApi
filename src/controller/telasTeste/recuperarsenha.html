@@ -4,10 +4,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Redefinir Senha</title>
-    <link rel="shortcut icon" href="SomenteIconAzul.png">
-	<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
 	<style>
-        body {
+body {
   font-family: 'Roboto', sans-serif;
   background-color: #efefef;
 }
@@ -173,8 +171,8 @@ label {
 <body>
     <div class="login">
         <h2 class="login-header">Redefinir Senha</h2>
-        <form action="/user/redefinirSenha" method="POST" class="login-container">
-          <span id="ocultar-form-usuario">
+        <form class="login-container"  id="formElem">
+          <span>
             <p><input type="email" placeholder="Email" name="email" autocomplete="off" required></p>
             <p><input type="password" placeholder="Nova Senha" name="novaSenha" autocomplete="off"  required></p>
             <p><input type="submit" value="Acessar"></p>
@@ -182,4 +180,26 @@ label {
         </form> <!-- / .login-container -->
       </div><!-- / .login -->
 </body>
+<script>
+    formElem.onsubmit = async (e) => {
+      e.preventDefault();
+      var form = document.querySelector("#formElem");
+     // var form = document.forms[0];
+
+        data = {
+          email : form.querySelector('input[name="email"]').value,
+          novaSenha : form.querySelector('input[name="novaSenha"]').value
+        }
+
+        let response = await fetch('/user/redefinirSenha', {
+                method: 'POST', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+        })
+
+        let text = await response.text(); // read response body as text
+    };
+</script>
 </html>

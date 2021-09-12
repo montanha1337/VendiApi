@@ -40,6 +40,14 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
   }else{
   }
 })
+
+
+router.get('/AtualizaToken',async(req,res)=>{
+  const atualizatoken = req.body.token;
+  const token = await Funcao.atualizajwt(atualizatoken)
+ res.send(200).json({token})
+
+})
 //testa o envio de email
 router.get('/enviaEmail',async(req,res)=>{
       const nome = req.body.assunto;
