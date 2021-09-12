@@ -1,13 +1,14 @@
 import Jwt from 'jsonwebtoken'
 import Chave from '../Banco/connect'
 import Atualiza from '../Banco/migrations/database'
+import EnvioEmail from '../config/configemail'
 import bcrypt from 'bcrypt'
 
 var salt = bcrypt.genSaltSync(10)
 
 
 
-
+//
 function gerajwt(iduser){
     const token = Jwt.sign({iduser}, Chave.secreto, {expiresIn: 300 });
     return token
@@ -22,7 +23,7 @@ function verificajwt(token){
     } )
     return verificado
 }
-function Atualizajwt(token,iduser){
+function Atualizajwt(token){
     const atualizado = verificajwt(token)
     if(atualizado>0){
         return Atualizado
@@ -47,11 +48,10 @@ async function verificaconexao(mensagem){
     const texto = result.rows[0]
       return texto
     }
-
     //para enviar email
     async function enviaremail(email,nome,mensagem){
 
-        const emailrest= await require("../config/configemail")(email, nome, mensagem)
+        const emailrest = await EnvioEmail.email(email, nome, mensagem)
             return emailrest
     }
     // Função criptografar senha

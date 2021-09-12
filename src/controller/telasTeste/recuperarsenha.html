@@ -1,19 +1,185 @@
 <!DOCTYPE html>
-<html>
-<body style="text-align: center;">
+<html lang="pt-br">
 
-<h2>Recuperar Senha</h2>
- <br>
- <br>
- <form action="/user/redefinirsenha" method="PUT" name="myForm">
-    <p><label for="first_name">Email:</label><br>
-    <input type="text" name="first_name" id="fname"></p>
+<head>
+	<meta charset="UTF-8">
+	<title>Redefinir Senha</title>
+    <link rel="shortcut icon" href="SomenteIconAzul.png">
+	<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
+	<style>
+        body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #efefef;
+}
 
-    <p><label for="last_name">Nova Senha:</label><br>
-    <input type="text" name="last_name" id="lname"></p>
+.login,
+.login input,
+label {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
 
-    <input value="Submit" type="submit" onclick="submitform()">
-</form>
+.login {
+  width: 400px;
+  margin: 2em auto;
+  font-size: 16px;
+  overflow: hidden;
+}
 
+/* Redefinir margens superior e inferior*/
+
+.login-header,
+.login p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.login-header {
+  background: #28d;
+  padding: 20px;
+  font-size: 1.4em;
+  font-weight: normal;
+  text-align: center;
+  color: #fff;
+}
+
+.login-container {
+  background: #fff;
+  padding: 12px;
+}
+
+/* Cada linha dentro de .login-container é definida com a tag p */
+
+.login p {
+  padding: 12px;
+}
+
+.login input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  padding: 16px;
+  outline: 0;
+  font-family: inherit;
+  font-size: 0.95em;
+}
+
+.login input {
+  background: #fff;
+  border-color: #bbb;
+  color: #555;
+}
+
+
+/* Campos de textos com efeito focus*/
+.login input:focus {
+   border-color: #888;
+}
+
+
+.login input[type="submit"] {
+  background: #28d;
+  border-color: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.login input[type="submit"]:hover {
+  background: #17c;
+}
+
+
+/* Buttons' Efeito focus*/
+
+.login input[type="submit"]:focus {
+  border-color: #05a;
+}
+
+/* == Accordion ==*/
+
+.item input {
+  display: none;
+  padding: 0 12px 0 12px;
+}
+
+.item label {
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: block;
+  padding: 16px;
+  background-color: #e2e2e2;
+  font-size: 20px;
+  color: #888;
+  cursor: pointer;
+  text-align: center;
+  width: 352px;
+  outline: 0;
+  font-family: inherit;
+  font-size: 1em;
+}
+
+.item label:hover {
+  background: #17c;
+  color: #fff;
+}
+
+.item label span {
+  padding-left: 200px;
+  transform: rotateX(45deg);
+}
+
+.item ul {
+  margin: 0 auto;
+  list-style: none;
+  padding: 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: all .4s;
+  background-color: #ffffff;
+  width: 352px;
+}
+
+.item ul li input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  padding: 16px;
+  outline: 0;
+  font-family: inherit;
+  font-size: 0.95em;
+  margin-bottom: 5px;
+  margin-top: 7px;
+  border-color: #ccc;
+}
+
+.item #check1:checked ~ ul {
+  height: auto;
+  max-height: 500px;
+  transition: all .4s linear;
+}
+
+.obs {
+  font-size: 12px;
+  color: #888;
+}
+    </style>
+</head>
+<body>
+    <div class="login">
+        <h2 class="login-header">Redefinir Senha</h2>
+        <form action="/user/redefinirSenha" method="POST" class="login-container">
+          <span id="ocultar-form-usuario">
+            <p><input type="email" placeholder="Email" name="email" autocomplete="off" required></p>
+            <p><input type="password" placeholder="Nova Senha" name="novaSenha" autocomplete="off"  required></p>
+            <p><input type="submit" value="Acessar"></p>
+          <!-- Fim - Accordion -->
+        </form> <!-- / .login-container -->
+      </div><!-- / .login -->
 </body>
 </html>
