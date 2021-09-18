@@ -55,8 +55,7 @@ router.post('/cadastro', async (req, res, ) => {
 router.put('/enviarEmailDeRedefinicao', async (req, res, ) => {
     const nome = "Redefinição de senha";
     const email = req.body.email;
-    const mensagem = req.body.urlRedefinicaoSenha;    
-    const recepcaoEmail=await Funcao.enviaremail(email, nome,mensagem)   
+    const recepcaoEmail=await Funcao.enviaremail(email, nome,'http://localhost:8080/user/redefinirsenha')   
     res.json({recepcaoEmail})
 })
 //rota demostração tela redefinição senha.
@@ -89,6 +88,5 @@ router.get('/testeConexao', async (req, res, ) => {
     const id= Funcao.verificajwt(token) 
     res.json(id)
 })
-router.put('/', async (req, res, ) => {})
-router.delete('/', async (req, res, ) => {})
+
 module.exports = router

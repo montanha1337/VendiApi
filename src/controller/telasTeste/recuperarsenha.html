@@ -1,13 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
+<!doctype html>
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Redefinir Senha</title>
-	<style>
+  <meta charset="utf-8">
+  <title>Redefinir Senha</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!--CSS Bootstrap-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!--Bootstrap Icons-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css%22%3E">
+  <!--CSS-->
+  <link rel="stylesheet" href="recuperarSenha.css">
+  <style>
+    
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #efefef;
+
 }
 
 .login,
@@ -19,6 +29,7 @@ label {
 }
 
 .login {
+  padding-top: 250px;
   width: 400px;
   margin: 2em auto;
   font-size: 16px;
@@ -166,20 +177,62 @@ label {
   font-size: 12px;
   color: #888;
 }
-    </style>
+  </style>
 </head>
-<body>
-    <div class="login">
+<body >
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src="../../assets/img/logo.png" alt=""width="auto" height="45"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page">Home</a>
+          </li>
+          <!--Dropdow Categorias-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Categorias
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Veículos</a></li>
+              <li><a class="dropdown-item" href="#">Eletrônicos</a></li>
+
+            </ul>
+          </li>
+
+        </ul>
+        
+        <!--SearchBar-->
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+        <!-- Button Modal Login -->
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#login">
+            <i class="bi bi-person-circle"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <!--JS Bootstrap-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+  <div class="login">
         <h2 class="login-header">Redefinir Senha</h2>
         <form class="login-container"  id="formElem">
-          <span>
             <p><input type="email" placeholder="Email" name="email" autocomplete="off" required></p>
             <p><input type="password" placeholder="Nova Senha" name="novaSenha" autocomplete="off"  required></p>
-            <p><input type="submit" value="Acessar"></p>
-          <!-- Fim - Accordion -->
-        </form> <!-- / .login-container -->
-      </div><!-- / .login -->
+            <p><input type="submit" value="Acessar" ></p>
+        </form>
+      </div>
+      <!--JS Bootstrap-->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
+
+
 <script>
     formElem.onsubmit = async (e) => {
       e.preventDefault();
@@ -192,14 +245,19 @@ label {
         }
 
         let response = await fetch('/user/redefinirSenha', {
-                method: 'POST', // or 'PUT'
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
         })
 
-        let text = await response.text(); // read response body as text
+        let text = await response;
+        if(text.statusText== 'OK'){
+        alert('Senha Alterda com Sucesso, favor retornar a pagina inicial');
+        }else{
+          alert('Email não encontrado. Verifique seu email!!!');
+        }
     };
 </script>
 </html>

@@ -1,8 +1,6 @@
 import Jwt from 'jsonwebtoken'
 import Chave from '../Banco/connect'
 import Atualiza from '../Banco/migrations/database'
-import Consulta from '../Banco/migrations/consulta'
-import Cadastro from '../Banco/migrations/insert'
 import EnvioEmail from '../config/configemail'
 import bcrypt from 'bcrypt'
 
@@ -22,8 +20,8 @@ function verificajwt(token){
     } )
     return verificado
 }
-function Atualizajwt(token){
-    const atualizado = verificajwt(token)
+function atualizajwt(token){
+    var atualizado = verificajwt(token)
         atualizado=gerajwt(atualizado)
         return atualizado
 }
@@ -72,4 +70,7 @@ async function verificaconexao(mensagem){
         return resulth
     }
 
-module.exports = { gerajwt, verificajwt,Atualizajwt, atualizabanco, verificaconexao, enviaremail,cripto, compare}
+module.exports = { gerajwt, verificajwt,atualizajwt, atualizabanco, verificaconexao, enviaremail,cripto, compare
+
+
+}
