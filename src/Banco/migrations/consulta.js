@@ -4,11 +4,11 @@ import Funcoes from '../../controller/functions'
 async function vendedor(token) {
     const user     = Funcoes.verificajwt(token)
     const banco    = await Banco.session()
-    const vendedor = banco.query('select u.nome, pes.cpf, tel.telefone, vend.classificacao, ende.cidade from Vendi.vendedor vend inner join Vendi.pessoa pes on pes.id_pessoa= vend.id_pessoa inner join Vendi.user u on u.id_user=pes.id_user inner join Vendi.telefone tel on tel.id_pessoa= pes.id_pessoa inner join Vendi.endereco ende on ende.id_pessoa= pes.id_pessoa where u.id_user=$1',[user])
-    if(vendedor){
-      return vendedor
-    }
+    const vendedor = await banco.query('select u.nome, p.cpf, t.telefone, v.classificacao, e.cidade from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where u.id_user = $1 ',[user])
+    if(vendedor.rows[0])
+      return vendedor.rows[0]
+    return 'Error'
   }
 
 
-module.exports = {vendedor}
+module.exports = {vendedor,}
