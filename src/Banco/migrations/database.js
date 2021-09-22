@@ -6,7 +6,7 @@ async function criauser(){
   const banco= await Banco.session()
   await banco.query({
     rowMode : 'array',
-    text: "CREATE TABLE Vendi.user (id_user SERIAL CONSTRAINT pk_id_user PRIMARY KEY,nome varchar(35) NOT NULL, email varchar(35) UNIQUE NOT NULL,senha varchar(200) NOT NULL); INSERT INTO Vendi.user(email, senha, nome)VALUES ('teste@teste.com','teste','Desenvolvedor');",
+    text: "CREATE TABLE Vendi.user (id_user SERIAL CONSTRAINT pk_id_user PRIMARY KEY,nome varchar(35) NOT NULL, email varchar(35) UNIQUE NOT NULL,senha varchar(200) NOT NULL, linkfoto varchar(200)); INSERT INTO Vendi.user(email, senha, nome)VALUES ('teste@teste.com','teste','Desenvolvedor');",
   })
   const user= banco.query({text:'select * from Vendi.user'})
   if(user){
@@ -30,7 +30,7 @@ async function criaconexao(){
 //Campos:id_pessoa,id_user,cpf
 async function criapessoa(){
   const banco= await Banco.session()
-  await banco.query("CREATE TABLE Vendi.pessoa (id_pessoa SERIAL CONSTRAINT pk_id_pessoa PRIMARY KEY,id_user integer REFERENCES vendi.user (id_user), cpf varchar(11) UNIQUE NOT NULL);")
+  await banco.query("CREATE TABLE Vendi.pessoa (id_pessoa SERIAL CONSTRAINT pk_id_pessoa PRIMARY KEY,id_user integer REFERENCES vendi.user (id_user), cpf varchar(15) UNIQUE NOT NULL);")
   const pessoa= banco.query({text:'select * from Vendi.pessoa'})
   if(pessoa){
     return pessoa
@@ -40,7 +40,7 @@ async function criapessoa(){
 //Campos:id_vendedor,id_pessoa,calssificacao
 async function criatelefone(){
   const banco= await Banco.session()
-  await banco.query("CREATE TABLE Vendi.telefone (id_telefone SERIAL CONSTRAINT pk_id_telefone PRIMARY KEY,id_pessoa integer REFERENCES vendi.pessoa (id_pessoa),telefone varchar(11) not null, whatsapp integer NOT NULL);")
+  await banco.query("CREATE TABLE Vendi.telefone (id_telefone SERIAL CONSTRAINT pk_id_telefone PRIMARY KEY,id_pessoa integer REFERENCES vendi.pessoa (id_pessoa),telefone varchar(20) not null, whatsapp boolean NOT NULL);")
     const telefone= banco.query({text:'select * from Vendi.telefone'})
     if(telefone){
       return telefone
@@ -70,7 +70,7 @@ async function criavendedor(){
 //Campos:id_categoria, cescricao
 async function criacategoria(){
   const banco= await Banco.session()
-  await banco.query("CREATE TABLE Vendi.categoria (id_categoria SERIAL CONSTRAINT pk_id_categoria PRIMARY KEY, descricao varchar(50) NOT NULL);")
+  await banco.query("CREATE TABLE Vendi.categoria (id_categoria SERIAL CONSTRAINT pk_id_categoria PRIMARY KEY, descricao varchar(50) NOT NULL);INSERT INTO vendi.categoria(descricao)VALUES ('Geral'); INSERT INTO vendi.categoria(descricao)VALUES ('Automoveis'); INSERT INTO vendi.categoria(descricao)VALUES ('Servicos');")
   const categoria= banco.query({text:'select * from Vendi.categoria'})
   if(categoria){
     return categoria

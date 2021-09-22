@@ -40,13 +40,20 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
   }else{
   }
 })
+router.get('/testeToken', async (req, res, ) => {
+  const token = req.body.token
+  const id= Funcao.verificajwt(token) 
+  res.json(id)
+})
 
 
 router.get('/AtualizaToken',async(req,res)=>{
   const atualizatoken = req.body.token;
   const token = await Funcao.atualizajwt(atualizatoken)
- res.send(200).json({token})
-
+ if(token== false){
+  res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
+}
+res.status(200).json({token})
 })
 //testa o envio de email
 router.get('/enviaEmail',async(req,res)=>{
@@ -55,7 +62,7 @@ router.get('/enviaEmail',async(req,res)=>{
       const mensagem = req.body.texto;
       
      const enviarEmail = Funcao.enviaremail(email, nome,mensagem)
-     res.send(200).json({enviarEmail})
+     res.status(200).json({enviarEmail})
 
   })
 module.exports = router
