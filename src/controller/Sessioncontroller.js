@@ -15,7 +15,7 @@ router.post('/login', async (req, res, ) => {
         const descript = await Funcao.compare(senha,user.rows[0].senha)        
         if(descript == true){
             const token= Funcao.gerajwt(user.rows[0].id_user)
-            res.status(200).json({token})
+              res.status(200).json({token})
         }else{
             res.status(401).json('Ops, Acho que você errou a senha, mas caso tenha esquecido por favor redefine-a')
         }
@@ -35,7 +35,7 @@ router.post('/cadastro', async (req, res, ) => {
         const descript = await Funcao.compare(senha,user.rows[0].senha)        
         if(descript == true){
             const token= Funcao.gerajwt(user.rows[0].id_user)
-            res.status(200).json({token})
+              res.status(200).json({token})
         }else{
             res.status(401).json('Ops, Acho que você errou a senha, mas caso tenha esquecido por favor redefine-a')
         }
@@ -45,36 +45,61 @@ router.post('/cadastro', async (req, res, ) => {
         const iduser = await banco.query('SELECT id_user FROM Vendi.user u where u.email= $1 and u.senha= $2;',[email, password])
         if(iduser.rows[0].id_user>0){
             const token= Funcao.gerajwt(iduser.rows[0].id_user)
-            res.status(200).json({token})
+              res.status(200).json({token})
         }else{
             res.status(401).json("Algo de errado ao gravar o usuário!!!")
         }
     }
 })
+router.post('/imagem', async (req, res, ) => {
+    parser.single('imagem')(req, res, err => {
+        if (err)
+            res.status(500).json({ error: 1, payload: err });
+        else {
+            var image = new Object()
+            image.id = req.file
+            image.url = image.id.path
+            const tokenreq= req.body.token
+            const token =Funcao.atualizajwt(tokenreq)
+            res.status(200).json({token});
+        }
+    })
+})
 //Rota para envio de email para redefinição de senha
 router.put('/enviarEmailDeRedefinicao', async (req, res, ) => {
     const nome = "Redefinição de senha";
-    const email = req.body.email;
-    const recepcaoEmail=await Funcao.enviaremail(email, nome,'http://localhost:8080/user/redefinirsenha')   
-    res.json({recepcaoEmail})
+    const email = req.body.email
+    const banco= await Banco.session()
+    const user = await banco.query('SELECT id_user, senha FROM Vendi.user u where u.email= $1',[email])
+    if(user.rows[0]){
+        const token= Funcao.gerajwtsenha(email)
+        const url = ('http://localhost:8080/user/redefinirsenha/'+token)
+        const recepcaoEmail=await Funcao.enviaremail(email, nome,url)   
+        res.json({recepcaoEmail})
+    }
 })
 //rota demostração tela redefinição senha.
-router.get('/redefinirsenha',async(req,res)=>{
-res.sendFile(__dirname+"/telasTeste/recuperarsenha.html")
+router.get('/redefinirsenha/:token',async(req,res)=>{
+res.sendFile(__dirname+"/tela/recuperarsenha.html")
 })
 //Rota para redefinição de senha
-router.post('/redefinirSenha', async (req, res, ) => {
-    const email = req.body.email
+router.post('/redefinirSenha/:token', async (req, res, ) => {
+    const { token } = req.params
+    const email = Funcao.verificatokensenha(token)
     const senhanova = req.body.novaSenha
     const password= await Funcao.cripto(senhanova)
     const banco= await Banco.session()
     const user = await banco.query('SELECT id_user, senha FROM Vendi.user u where u.email= $1',[email])
+
     if(user.rows[0]){
         await banco.query("UPDATE vendi.user SET senha=$1 WHERE email=$2;",[password,email])
         const iduser = await banco.query('SELECT id_user FROM Vendi.user u where u.email= $1 and u.senha= $2;',[email, password])
         if(iduser.rows[0].id_user>0){
             const token= Funcao.gerajwt(iduser.rows[0].id_user)
-            res.status(200).json({token})
+            if(token== false){
+                res.status(401).json({'token':'token invalido'})
+              }
+              res.status(200).json({token})
         }else{
             res.status(401).json("Algo de errado ao gravar o usuário!!!")
         }
@@ -83,10 +108,5 @@ router.post('/redefinirSenha', async (req, res, ) => {
     }
 })
 // Rota para Verificar o token
-router.get('/testeConexao', async (req, res, ) => {
-    const token = req.body.token
-    const id= Funcao.verificajwt(token) 
-    res.json(id)
-})
 
 module.exports = router

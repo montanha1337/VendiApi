@@ -15,16 +15,32 @@ router.post('/Inserir', async (req, res, ) => {
     data.cidade=req.body.cidade
     data.numero=req.body.numero
     data.cep=req.body.cep
-    data.classificacaoVendedor= req.body.classificacao
+    data.classificacaoVendedor= 1
     const token1=req.body.token
-    const cpf= Funcao.validacpf(data["cpf"])
-    if(cpf == true){
-        //await Cadastro.vendedor(token1, data)
-        const token = Funcao.atualizajwt(token1)
-        const result = await Consulta.vendedor(token1)
-        res.status(200).json({token,result})
+    var validacpf =  await Funcao.validacpf(data["cpf"])
+    if(validacpf == true){
+        const token = Funcao.atualizajwt(token1) 
+        if(token== false){
+            res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
+        }else{
+            const verificaVendedor = await Consulta.pessoacpf(token)
+            if(data["cpf"] == verificaVendedor){        
+                const result = await Consulta.vendedor(token)
+                res.status(200).json({token,result})
+            }else{
+                const vendedor=await Cadastro.vendedor(token, data)
+                if(vendedor == false){
+                    const err = "token invalido"
+                    res.status(401).json({err})
+                }else{       
+                    const result = await Consulta.vendedor(token)
+                    res.status(200).json({token,result})
+                }
+            }   
+        }
     }else{
-        res.status(400).json('Cpf Inválido')
+        res.status(401).json("CPF invalido")
     }
 })
+
 module.exports = router
