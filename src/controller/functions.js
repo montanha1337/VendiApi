@@ -123,16 +123,8 @@ async function verificaconexao(mensagem){
         return true;
     }
     async function baixarImagem(imagem) {
-        parser.single('imagem')(imagem, err => {
-            if (err)
-                return false
-            else {
-                var image = new Object()
-                image.id = imagem
-                image.url = image.id.path
-                return image.url
-            }
-        })
+       const img= parser.single('imagem')
+        return img
     }
 
 module.exports = { gerajwt, verificajwt,atualizajwt, atualizabanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, baixarImagem}

@@ -23,6 +23,14 @@ router.post('/perfil', async (req, res, ) => {
         res.status(200).json({token,perfil})
     }
 })
+router.get('/anuncio', async (req, res, ) => {
+    const anuncio = await Consulta.anuncio()
+    if(anuncio== false){
+        res.status(401).json('ocorreu um erro ao buscar dados, verifique o banco de dados.')
+    }else{
+        res.status(201).json({anuncio})
+    }
+})
 
 
 module.exports = router

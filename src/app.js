@@ -1,5 +1,9 @@
 import express from 'express';
 import routes from'./routes';
+var cors = require('cors')
+var app = express()
+
+app.use(cors())
 
 class App{
   constructor(){

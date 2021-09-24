@@ -1,8 +1,12 @@
 import express from 'express'
+import multer from 'multer'
 import Funcao from './functions'
 import Banco from '../Banco/connect'
+import Consulta from '../Banco/migrations/consulta'
+import Cadastro from '../Banco/migrations/insert'
 
 const router = express.Router()
+const parser = multer({ dest: 'uploads/avatar' })
 
 // Rota para Login
 
@@ -51,20 +55,7 @@ router.post('/cadastro', async (req, res, ) => {
         }
     }
 })
-router.post('/imagem', async (req, res, ) => {
-    parser.single('imagem')(req, res, err => {
-        if (err)
-            res.status(500).json({ error: 1, payload: err });
-        else {
-            var image = new Object()
-            image.id = req.file
-            image.url = image.id.path
-            const tokenreq= req.body.token
-            const token =Funcao.atualizajwt(tokenreq)
-            res.status(200).json({token});
-        }
-    })
-})
+
 //Rota para envio de email para redefinição de senha
 router.put('/enviarEmailDeRedefinicao', async (req, res, ) => {
     const nome = "Redefinição de senha";
@@ -107,6 +98,16 @@ router.post('/redefinirSenha/:token', async (req, res, ) => {
         res.status(401).json("email não encontrado")
     }
 })
-// Rota para Verificar o token
+router.post('/avatar',parser.single('imagem'), async (req, res,next ) => {
+    var file = req.file
+    const token1 = req.body.token
+    const token = await Funcao.atualizajwt(token1) 
+    if(token== false){
+        res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
+    }else{
+        const img= await Cadastro.avatar(token,file.path)
+    res.status(200).json({url:file.path,token})
+    }
+})
 
 module.exports = router

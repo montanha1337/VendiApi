@@ -1,30 +1,31 @@
 import express from 'express'
 import Funcao from './functions'
-import Banco from '../Banco/connect'
+import Consulta from '../Banco/migrations/consulta'
+import Cadastro from '../Banco/migrations/insert'
 import multer from 'multer'
 
-const parser = multer({ dest: 'uploads' })
+const parser = multer({ dest: 'uploads/anuncio' })
 
 const router = express.Router()
-
-// Rota para Login
-
-router.post('/imagem', async (req, res, ) => {
-        parser.single('imagem')(req, res, err => {
-            if (err)
-                res.status(500).json({ error: 1, payload: err });
-            else {
-                var image = new Object()
-                image.id = req.file
-                image.url = image.id.path
-                
-            res.status(200).json({ error: 0, payload: { nome: image.id.originalname, url: image.url } });
-        }
-    })
-})
-router.get('/imagem', async (req, res, ) => {
+router.post('/inserir',parser.single('imagem'), async (req, res,next ) => {
     
+    var anuncio       = Object()
+    anuncio.file      = req.file
+    anuncio.categoria = req.body.categoria
+    anuncio.titulo    = req.body.titulo
+    anuncio.descricao = req.body.descricao
+    anuncio.valor     = req.body.valorVenda
+    anuncio.data      = new Date();
+    const token1 = req.body.token
+    const token = Funcao.atualizajwt(token1) 
+    if(token== false){
+        res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
+    }else{
+        const idAnuncio = await Cadastro.anuncio(token,anuncio)
+        res.status(200).json({token,idAnuncio})
+    }
 })
+
 
 
 
