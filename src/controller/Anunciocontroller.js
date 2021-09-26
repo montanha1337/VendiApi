@@ -22,8 +22,20 @@ router.post('/inserir',parser.single('imagem'), async (req, res,next ) => {
         res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
     }else{
         const idAnuncio = await Cadastro.anuncio(token,anuncio)
+        if(idAnuncio== false){
+            res.status(200).json({token,idAnuncio:[]})
+        }
         res.status(200).json({token,idAnuncio})
     }
+})
+router.get('/buscar/:id', async (req, res, ) => {
+        const { id } = req.params
+        const anuncio = await Consulta.anuncioLista(id)
+        if(anuncio== false){
+            res.status(200).json({anuncio:[]})
+        }
+        res.status(200).json({anuncio})
+    
 })
 
 

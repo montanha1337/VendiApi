@@ -54,6 +54,19 @@ async function vendedor(token,data) {
       return novoAnuncio.rows[0].max
     }
 }
+async function cliente(token,data) {
+  const user     = Funcoes.verificajwt(token)
+  if(user== false){
+    return false
+  }else{
+    const banco    = await Banco.session()
+    await banco.query('INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= $1),$2);',[user,data["cpf"]])
+    const pessoa = await banco.query('select id_pessoa from Vendi.pessoa p where p.id_user= $1',[user])
+    await banco.query('INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2,$3);',[pessoa.rows[0].id_pessoa,data.telefone,data["whatsapp"]])
+    await banco.query('INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2,$3,$4,$5,$6);',[pessoa.rows[0].id_pessoa,data["rua"],data["bairro"],data["cidade"],data["numero"],data["cep"]])
+    return true
+  }
+}
 
 
-module.exports = {vendedor,avatar,imagemAnuncio,anuncio}
+module.exports = {vendedor,avatar,imagemAnuncio,anuncio, cliente}
