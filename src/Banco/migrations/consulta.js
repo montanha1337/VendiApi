@@ -13,6 +13,18 @@ async function vendedor(token) {
       return false
     }
   }
+  async function cliente(token) {
+    const user     = Funcoes.verificajwt(token)
+    if(user== false){
+      return false
+    }else{
+      const banco    = await Banco.session()
+      const cliente = await banco.query('select u.nome, p.cpf, t.telefone, e.cidade from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where u.id_user = $1 ',[user])
+      if(cliente.rows[0])
+        return cliente.rows[0]
+      return false
+    }
+  }
   async function pessoacpf(token) {
     const user     = Funcoes.verificajwt(token)
     if(user== false){
@@ -52,15 +64,25 @@ async function vendedor(token) {
       return false
     }
   }
-  async function anuncio() {
+  async function anuncio(categoria,pagina) {
       const banco    = await Banco.session()
-      const anuncio = await banco.query('select a.id_anuncio,u.nome,a.id_categoria, a.titulo, a.descricao, a.valor, a.dataanuncio, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p   on p.id_pessoa= v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f     on f.id_anuncio = a.id_anuncio')
+      const anuncio = await banco.query('select a.id_anuncio,u.nome as vendedor, e.cidade,a.id_categoria, a.titulo, a.descricao, a.valor, a.dataanuncio, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_categoria = $1 LIMIT 10 OFFSET($2 - 1) * 10',[categoria,pagina])
       if(anuncio.rows[0]){
           return anuncio.rows
         }
         return false
     
   }
+  async function anuncioLista(idAnuncio) {
+    const banco    = await Banco.session()
+    const anuncio = await banco.query('select a.id_anuncio,u.nome as vendedor, e.cidade,a.id_categoria, a.titulo, a.descricao, a.valor, a.dataanuncio, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_anuncio = $1 ',[idAnuncio])
+    if(anuncio.rows[0]){
+        return anuncio.rows
+      }
+      return false
+  
+}
+  
 
 
-module.exports = {vendedor, pessoacpf, categoria,  perfil, anuncio}
+module.exports = {vendedor,cliente, pessoacpf, categoria,  perfil, anuncio, anuncioLista}

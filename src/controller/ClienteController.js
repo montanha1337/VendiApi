@@ -15,7 +15,6 @@ router.post('/Inserir', async (req, res, ) => {
     data.cidade=req.body.cidade
     data.numero=req.body.numero
     data.cep=req.body.cep
-    data.classificacaoVendedor= 1
     const token1=req.body.token
     var validacpf =  await Funcao.validacpf(data["cpf"])
     if(validacpf == true){
@@ -23,17 +22,17 @@ router.post('/Inserir', async (req, res, ) => {
         if(token== false){
             res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
         }else{
-            const verificaVendedor = await Consulta.pessoacpf(token)
-            if(data["cpf"] == verificaVendedor){        
-                const result = await Consulta.vendedor(token)
+            const verificacliente = await Consulta.pessoacpf(token)
+            if(data["cpf"] == verificacliente){        
+                const result = await Consulta.cliente(token)
                 res.status(200).json({token,result})
             }else{
-                const vendedor=await Cadastro.vendedor(token, data)
-                if(vendedor == false){
+                const cliente=await Cadastro.cliente(token, data)
+                if(cliente == false){
                     const err = "token invalido"
                     res.status(401).json({err})
                 }else{       
-                    const result = await Consulta.vendedor(token)
+                    const result = await Consulta.cliente(token)
                     res.status(200).json({token,result})
                 }
             }   
@@ -49,11 +48,10 @@ router.get('/buscar', async (req, res, ) => {
     if(token== false){
         res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
     }else{
-        const result = await Consulta.vendedor(token)
+        const result = await Consulta.cliente(token)
         res.status(200).json({token,result})
     }
     
 })
-
 
 module.exports = router
