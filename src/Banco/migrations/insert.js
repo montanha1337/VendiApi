@@ -3,30 +3,33 @@ import Funcoes from '../../controller/functions'
 import Consulta from './consulta'
 
 async function vendedor(token,data) {
-    const user     = Funcoes.verificajwt(token)
-    if(user== false){
-      return false
+    const user     = await Consulta.verificaUser(token)
+    if(user.status== false){
+      const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
+      return erro
     }else{
       const banco    = await Banco.session()
       await banco.query('INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= $1),$2);',[user,data["cpf"]])
       const pessoa = await banco.query('select id_pessoa from Vendi.pessoa p where p.id_user= $1',[user])
-      await banco.query('INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2,$3);',[pessoa.rows[0].id_pessoa,data.telefone,data["whatsapp"]])
+      await banco.query('INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ($1,$2,$3);',[pessoa.rows[0].id_pessoa,data.telefone,data["whatsapp"]])
       await banco.query('INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2,$3,$4,$5,$6);',[pessoa.rows[0].id_pessoa,data["rua"],data["bairro"],data["cidade"],data["numero"],data["cep"]])
       await banco.query('INSERT INTO vendi.vendedor(id_pessoa,classificacao) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2);',[pessoa.rows[0].id_pessoa,data["classificacaoVendedor"]])
       return true
     }
   }
   async function avatar(token,caminho) {
-    const user = Funcoes.verificajwt(token) 
-    if(token== false){
-        res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
+    const user = await Consulta.verificaUser(token) 
+    if(user.status== false){
+      const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
+      return erro
     }else{
       const banco = await Banco.session()
       const avatar = await banco.query('UPDATE vendi."user" SET linkfoto=$1 WHERE id_user=$2;',[caminho,user])
       if(avatar.rowCount==1){
       return true
       }else{
-        return false
+      const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
+      return erro
       }
     }
   }
@@ -36,13 +39,15 @@ async function vendedor(token,data) {
       if(avatar.rowCount==1){
       return true
       }else{
-        return false
+        const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
+        return erro
       }
   }
   async function anuncio(token,anuncio) {
-    const user     = Funcoes.verificajwt(token)
-    if(user== false){
-      return false
+    const user     = await Consulta.verificaUser(token)
+    if(user.status== false){
+      const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
+      return erro
     }else{
       const banco          = await Banco.session()
       const {id_vendedor}  = await Consulta.vendedor(token)
@@ -55,9 +60,10 @@ async function vendedor(token,data) {
     }
 }
 async function cliente(token,data) {
-  const user     = Funcoes.verificajwt(token)
-  if(user== false){
-    return false
+  const user     = await Consulta.verificaUser(token)
+  if(user.status== false){
+    const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
+    return erro
   }else{
     const banco    = await Banco.session()
     await banco.query('INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= $1),$2);',[user,data["cpf"]])
@@ -67,6 +73,24 @@ async function cliente(token,data) {
     return true
   }
 }
+async function userTeste(password) {
+  const banco    = await Banco.session()
+  await banco.query("INSERT INTO Vendi.user(email, senha, nome)VALUES ('teste@teste.com',$1,'Desenvolvedor');",[password])
+  return true
+}
+async function deletaAnuncio(id,token) {
+  const vendedor = await Consulta.validaVendedor(token)
+  console.log(vendedor)
+  if(vendedor.status== false){
+    const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
+    return erro
+  }else{
+  const banco    = await Banco.session()
+  const teste = await banco.query("delete from Vendi.anuncio  cascate where anuncio.id_anuncio= $1 ",[id])
+  console.log(teste)
+  return true
+  }
+}
 
 
-module.exports = {vendedor,avatar,imagemAnuncio,anuncio, cliente}
+module.exports = { vendedor, avatar, imagemAnuncio, anuncio, cliente, userTeste, deletaAnuncio}

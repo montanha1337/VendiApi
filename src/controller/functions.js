@@ -9,6 +9,13 @@ const parser = multer({ dest: 'uploads' })
 
 var salt = bcrypt.genSaltSync(10)
 
+function padraoErro(mensagem){
+    var erro= Object()
+    erro.mensagem=mensagem
+    erro.status=false
+    return erro
+}
+
 function gerajwt(iduser){
     const token = Jwt.sign({iduser}, Chave.secreto, {expiresIn: "30 days" });
     return token
@@ -45,22 +52,7 @@ function atualizajwt(token){
         return text
 }
 
-async function atualizabanco(){
-    const {rows} = await Atualiza.criaconexao()
-    await Atualiza.criauser()
-    await Atualiza.criapessoa()
-    await Atualiza.criatelefone()
-    await Atualiza.criaendereco()
-    await Atualiza.criavendedor()
-    await Atualiza.criacategoria()
-    await Atualiza.criaanuncio()
-    await Atualiza.criafoto()
-    await Atualiza.criaentrega()
-    await Atualiza.criaformadepagamento()
-    await Atualiza.crianegociacao()
-    const texto = rows
-    return texto
-}
+
 
 async function verificaconexao(mensagem){
     const banco= await Chave.session()
@@ -126,5 +118,24 @@ async function verificaconexao(mensagem){
        const img= parser.single('imagem')
         return img
     }
+    async function atualizabanco(){
+        const {rows} = await Atualiza.criaconexao()
+        await Atualiza.criauser()
+        await Atualiza.criapessoa()
+        await Atualiza.criatelefone()
+        await Atualiza.criaendereco()
+        await Atualiza.criavendedor()
+        await Atualiza.criacategoria()
+        await Atualiza.criaanuncio()
+        await Atualiza.criafoto()
+        await Atualiza.criaentrega()
+        await Atualiza.criaformadepagamento()
+        await Atualiza.crianegociacao()
+        const password = await cripto("teste")
+        await Atualiza.userTeste(password)
+        const texto = rows
+        return texto
+    }
 
-module.exports = { gerajwt, verificajwt,atualizajwt, atualizabanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, baixarImagem}
+
+module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, atualizabanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, baixarImagem}

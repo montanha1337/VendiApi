@@ -21,10 +21,12 @@ router.post('/login', async (req, res, ) => {
             const token= Funcao.gerajwt(user.rows[0].id_user)
               res.status(200).json({token})
         }else{
-            res.status(401).json('Ops, Acho que você errou a senha, mas caso tenha esquecido por favor redefine-a')
+            console.log({Erro: 'Senha Invalida'})
+            res.status(401).json({token:[]})
         }
     }else{
-        res.status(401).json('Email incorreto ou usuario inexistente')
+        console.log({Erro: 'Email não encontrado'})
+        res.status(401).json({token:[]})
     }
 })
 // Rota para cadastro de usuario
@@ -41,7 +43,8 @@ router.post('/cadastro', async (req, res, ) => {
             const token= Funcao.gerajwt(user.rows[0].id_user)
               res.status(200).json({token})
         }else{
-            res.status(401).json('Ops, Acho que você errou a senha, mas caso tenha esquecido por favor redefine-a')
+            console.log({Erro: 'Senha Invalida'})
+            res.status(401).json({token:[]})
         }
     }else{        
         const password= await Funcao.cripto(senha)
@@ -51,7 +54,8 @@ router.post('/cadastro', async (req, res, ) => {
             const token= Funcao.gerajwt(iduser.rows[0].id_user)
               res.status(200).json({token})
         }else{
-            res.status(401).json("Algo de errado ao gravar o usuário!!!")
+            console.log({Erro: 'Erro ao gravar no banco de dados, por favor verifique os dados.'})
+            res.status(401).json({token:[]})
         }
     }
 })
@@ -81,29 +85,31 @@ router.post('/redefinirSenha/:token', async (req, res, ) => {
     const password= await Funcao.cripto(senhanova)
     const banco= await Banco.session()
     const user = await banco.query('SELECT id_user, senha FROM Vendi.user u where u.email= $1',[email])
-
     if(user.rows[0]){
         await banco.query("UPDATE vendi.user SET senha=$1 WHERE email=$2;",[password,email])
         const iduser = await banco.query('SELECT id_user FROM Vendi.user u where u.email= $1 and u.senha= $2;',[email, password])
         if(iduser.rows[0].id_user>0){
             const token= Funcao.gerajwt(iduser.rows[0].id_user)
             if(token== false){
-                res.status(401).json({'token':'token invalido'})
+                res.status(401).json({token:[]})
               }
               res.status(200).json({token})
         }else{
-            res.status(401).json("Algo de errado ao gravar o usuário!!!")
+            console.log({Erro: 'Erro ao gravar no banco de dados, por favor verifique os dados.'})
+            res.status(401).json({token:[]})
         }
     }else{
-        res.status(401).json("email não encontrado")
+        console.log({Erro: 'Email não encontrado'})
+        res.status(401).json({token:[]})
     }
 })
 router.post('/avatar',parser.single('imagem'), async (req, res,next ) => {
     var file = req.file
-    const token1 = req.body.token
+    const token1 =req.headers.authorization.replace(/^Bearer\s/, '');
     const token = await Funcao.atualizajwt(token1) 
     if(token== false){
-        res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
+        console.log({Erro: 'Token Expirado'})
+        res.status(401).json({url:[],token:[]})
     }else{
         const img= await Cadastro.avatar(token,file.path)
     res.status(200).json({url:file.path,token})
