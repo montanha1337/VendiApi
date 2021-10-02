@@ -1,13 +1,12 @@
 import Banco from '../connect'
+import Funcao from '../../controller/functions'
+
 
 //Função com Script Para criar usuário
 //Campos:id_user,nome,email,senha
 async function criauser(){
   const banco= await Banco.session()
-  await banco.query({
-    rowMode : 'array',
-    text: "CREATE TABLE Vendi.user (id_user SERIAL CONSTRAINT pk_id_user PRIMARY KEY,nome varchar(35) NOT NULL, email varchar(35) UNIQUE NOT NULL,senha varchar(200) NOT NULL, linkfoto varchar(200)); INSERT INTO Vendi.user(email, senha, nome)VALUES ('teste@teste.com','teste','Desenvolvedor');",
-  })
+  await banco.query("CREATE TABLE Vendi.user (id_user SERIAL CONSTRAINT pk_id_user PRIMARY KEY,nome varchar(35) NOT NULL, email varchar(35) UNIQUE NOT NULL,senha varchar(200) NOT NULL, linkfoto varchar(200));",)
   const user= banco.query({text:'select * from Vendi.user'})
   if(user){
     return user
@@ -80,7 +79,7 @@ async function criacategoria(){
 //Campos:
 async function criaanuncio(){
   const banco= await Banco.session()
-  await banco.query("CREATE TABLE Vendi.anuncio (id_anuncio SERIAL CONSTRAINT pk_id_anuncio PRIMARY KEY,id_vendedor integer REFERENCES vendi.vendedor (id_vendedor),id_categoria integer REFERENCES vendi.categoria (id_categoria),titulo varchar(150) not null, descricao varchar(500) not null, valor float not null, dataAnuncio date not null);")
+  await banco.query("CREATE TABLE Vendi.anuncio (id_anuncio SERIAL CONSTRAINT pk_id_anuncio PRIMARY KEY,id_vendedor integer REFERENCES vendi.vendedor (id_vendedor),id_categoria integer REFERENCES vendi.categoria (id_categoria),titulo varchar(150) not null, descricao varchar(500) not null, valor numeric not null, dataAnuncio date not null,classificacao integer);")
   const anuncio= banco.query({text:'select * from Vendi.anuncio'})
   if(anuncio){
     return anuncio
@@ -118,6 +117,11 @@ async function crianegociacao(){
     return negociacao
   }
 }
+async function userTeste(password) {
+  const banco    = await Banco.session()
+  await banco.query("INSERT INTO Vendi.user(email, senha, nome)VALUES ('teste@teste.com',$1,'Desenvolvedor');",[password])
+  return true
+}
 
 //Função Com Script para Deletar O Schema do banco de dados
   async function deletaschema(){
@@ -137,4 +141,4 @@ async function crianegociacao(){
 
 
 
-module.exports = {criauser, criaconexao, deletaschema, criapessoa, criavendedor, criacategoria, criaanuncio, criafoto, criatelefone, criaendereco, criaentrega, criaformadepagamento, crianegociacao}
+module.exports = {criauser, userTeste, criaconexao, deletaschema, criapessoa, criavendedor, criacategoria, criaanuncio, criafoto, criatelefone, criaendereco, criaentrega, criaformadepagamento, crianegociacao}

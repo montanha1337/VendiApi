@@ -2,6 +2,7 @@ import express  from  'express'
 import Banco    from  '../Banco/connect'
 import Funcao   from  './functions'
 import Database from  '../Banco/migrations/database'
+import Editar from '../Banco/migrations/editar'
 
 const router = express.Router()
 
@@ -41,17 +42,18 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
   }
 })
 router.get('/testeToken', async (req, res, ) => {
-  const token = req.body.token
-  const id= Funcao.verificajwt(token) 
+  const Bearer = req.headers.authorization.replace(/^Bearer\s/, '');
+  console.log(Bearer)
+  const id= Funcao.verificajwt(Bearer) 
   res.json(id)
 })
 
 
 router.get('/AtualizaToken',async(req,res)=>{
-  const atualizatoken = req.body.token;
+  const atualizatoken = req.headers.authorization.replace(/^Bearer\s/, '');
   const token = await Funcao.atualizajwt(atualizatoken)
  if(token== false){
-  res.status(401).json({'token':'Nao foi possivel indentificar o usuario'})
+  res.status(401).json({token:[]})
 }
 res.status(200).json({token})
 })
@@ -65,4 +67,14 @@ router.get('/enviaEmail',async(req,res)=>{
      res.status(200).json({enviarEmail})
 
   })
+  router.get('/testeStringBanco', async (req, res, ) => {
+  const tabela = req.body.tabela
+  const campo = req.body.campo
+  const valor = req.body.valor
+  const campoBusca = req.body.campoBusca
+  const valorBusca = req.body.valorBusca  
+  const result= await Editar.updateTable(tabela,campo,valor,campoBusca, valorBusca)
+  res.status(200).json(result)
+
+})
 module.exports = router
