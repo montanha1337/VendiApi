@@ -2,11 +2,21 @@ import express from 'express'
 import multer from 'multer'
 import Funcao from './functions'
 import Banco from '../Banco/connect'
-import Consulta from '../Banco/migrations/consulta'
 import Cadastro from '../Banco/migrations/insert'
 
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, `${__dirname}/uploads/avatar`)
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.originalname)
+    }
+  })
+  const parser = multer({ storage: storage })
 const router = express.Router()
-const parser = multer({ dest: 'uploads/avatar' })
+
 
 // Rota para Login
 
@@ -103,17 +113,11 @@ router.post('/redefinirSenha/:token', async (req, res, ) => {
         res.status(401).json({token:[]})
     }
 })
-router.post('/avatar',parser.single('imagem'), async (req, res,next ) => {
-    var file = req.file
-    const token1 =req.headers.authorization.replace(/^Bearer\s/, '');
-    const token = await Funcao.atualizajwt(token1) 
-    if(token== false){
-        console.log({Erro: 'Token Expirado'})
-        res.status(401).json({url:[],token:[]})
-    }else{
-        const img= await Cadastro.avatar(token,file.path)
-    res.status(200).json({url:file.path,token})
-    }
+router.post('/avatar',parser.single('imagem'), async (req, res, ) => {
+     
+     const file = req.file
+     console.log(file)
+    res.json(file)
 })
 
 module.exports = router

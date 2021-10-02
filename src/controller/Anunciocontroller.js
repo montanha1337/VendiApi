@@ -5,8 +5,16 @@ import Cadastro from '../Banco/migrations/insert'
 import multer from 'multer'
 import { Token } from 'sucrase/dist/parser/tokenizer'
 
-const parser = multer({ dest: 'uploads/anuncio' })
-
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, `${__dirname}/uploads/anuncio`)
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.originalname)
+    }
+  })
+const parser = multer({ storage: storage })
 const router = express.Router()
 router.post('/inserir',parser.single('imagem'), async (req, res,next ) => {
     
