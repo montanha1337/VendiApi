@@ -21,11 +21,13 @@ router.post('/perfil', async (req, res, ) => {
         console.log(token.mensagem)
         res.status(401).json({token:[],perfil:[]})
     }else{
-        const perfil = await Consulta.perfil(token)
+        var perfil = await Consulta.perfil(token)
         if(token.status == false){
             console.log(token.mensagem)
             res.status(401).json({token:[],perfil:[]})
         }else{
+        var temp=perfil.nome.split(" ");
+        perfil.nome = temp[0]
         res.status(200).json({token,perfil})
         }
     }
