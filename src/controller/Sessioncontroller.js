@@ -3,6 +3,7 @@ import multer from 'multer'
 import Funcao from './functions'
 import Banco from '../Banco/connect'
 import Cadastro from '../Banco/migrations/insert'
+import Consulta from '../Banco/migrations/consulta'
 
 
 const storage = multer.diskStorage({
@@ -116,8 +117,21 @@ router.post('/redefinirSenha/:token', async (req, res, ) => {
 router.post('/avatar',parser.single('imagem'), async (req, res, ) => {
      
      const file = req.file
-     console.log(file)
-    res.json(file)
+     var token = req.headers.authorization.replace(/^Bearer\s/, '')
+     await Cadastro.avatar(token,file.path)
+     token = Funcao.atualizajwt(token) 
+     if(token.status == false){
+         console.log(token.mensagem)
+         res.status(401).json({token:[],perfil:[]})
+     }else{
+         const perfil = await Consulta.perfil(token)
+         if(token.status == false){
+             console.log(token.mensagem)
+             res.status(401).json({token:[],perfil:[]})
+         }else{
+         res.status(200).json({token,perfil})
+         }
+     }
 })
 
 module.exports = router
