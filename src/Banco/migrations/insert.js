@@ -3,18 +3,33 @@ import Funcoes from '../../controller/functions'
 import Consulta from './consulta'
 
 async function vendedor(token,data) {
+  var pessoa
     const user     = await Consulta.verificaUser(token)
     if(user.status== false){
-      const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
-      return erro
+      return user
     }else{
-      const banco    = await Banco.session()
-      await banco.query('INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= $1),$2);',[user,data["cpf"]])
-      const pessoa = await banco.query('select id_pessoa from Vendi.pessoa p where p.id_user= $1',[user])
-      await banco.query('INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ($1,$2,$3);',[pessoa.rows[0].id_pessoa,data.telefone,data["whatsapp"]])
-      await banco.query('INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2,$3,$4,$5,$6);',[pessoa.rows[0].id_pessoa,data["rua"],data["bairro"],data["cidade"],data["numero"],data["cep"]])
-      await banco.query('INSERT INTO vendi.vendedor(id_pessoa,classificacao) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2);',[pessoa.rows[0].id_pessoa,data["classificacaoVendedor"]])
-      return true
+      const cpf = await Consulta.pessoacpf(token, data['cpf'])
+      if(cpf.status == false){
+        pessoa= await Consulta.vendedor(token)
+        if(pessoa.status== false){
+          return pessoa
+        }else{
+          return pessoa
+        }
+      }else{
+        const banco    = await Banco.session()
+        await banco.query('INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= $1),$2);',[user,data["cpf"]])
+        pessoa = await banco.query('select id_pessoa from Vendi.pessoa p where p.id_user= $1',[user])
+        await banco.query('INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ($1,$2,$3);',[pessoa.rows[0].id_pessoa,data.telefone,data["whatsapp"]])
+        await banco.query('INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ($1,$2,$3,$4,$5,$6);',[pessoa.rows[0].id_pessoa,data["rua"],data["bairro"],data["cidade"],data["numero"],data["cep"]])
+        await banco.query('INSERT INTO vendi.vendedor(id_pessoa,classificacao) VALUES ($1,$2);',[pessoa.rows[0].id_pessoa,data["classificacao"]])
+        pessoa= await Consulta.vendedor(token)
+        if(pessoa.status== false){
+          return pessoa
+        }else{
+          return pessoa
+        }
+      }
     }
   }
   async function avatar(token,caminho) {
@@ -55,7 +70,7 @@ async function vendedor(token,data) {
       const novoAnuncio    = await banco.query('SELECT MAX(id_anuncio) FROM Vendi.anuncio')
       const id_anuncio     = novoAnuncio.rows[0].max 
       const imagem            = anuncio["file"]
-      const avatar         = imagemAnuncio(id_anuncio,imagem.path)
+      const avatar         = imagemAnuncio(id_anuncio,imagem.filename)
       return novoAnuncio.rows[0].max
     }
 }

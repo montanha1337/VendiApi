@@ -17,74 +17,38 @@ router.post('/Inserir', async (req, res, ) => {
     data.cidade=req.body.cidade
     data.numero=req.body.numero
     data.cep=req.body.cep
+    data.classificacao = 0
     
+    var result
+    var tokenVenda
+    var verifica
     const token1=req.headers.authorization.replace(/^Bearer\s/, '');
-    const token = Funcao.atualizajwt(token1) 
-    var result = await Consulta.vendedor(token)
-    const verificaCpf = await Consulta.selectTable('pessoa','cpf','cpf', data['cpf'])
-    const verificUser = await Consulta.verificaUser(token)
-    var tokenVendas
-    if(verificUser.status == false){
-        console.log(verificUser.mensagem)
-        res.status(401).json({token:null,tokenVendas:null,result:null})
-    }else{
-    tokenVendas = Funcao.gerajwt(result.id_vendedor)
-    if(token.status == false){
+    const token = Funcao.atualizajwt(token1)
+    if(token.status== false){
         console.log(token.mensagem)
-        res.status(401).json({token:null,tokenVendas:null,result:null})
+        res.status(401).json({token:null,tokenVenda:null,result:null})
     }else{
-    if(token.status == false){
-        console.log(token.mensagem)
-        res.status(401).json({token:null,tokenVendas:null,result:null})
-    }else{
-    if(verificaCpf.status == false){
-        var validacpf =  await Funcao.validacpf(data["cpf"])
-        if(validacpf == true){
-            if(token.status == false){
-                console.log(token.mensagem)
-                res.status(401).json({token:null,tokenVendas:null,result:null})
-            }else{
-                const verificavendedor = await Consulta.pessoacpf(token)
-                if(verificavendedor.status == false){
-                    const vendedor= await Cadastro.vendedor(token, data)
-                    if(vendedor.status == false){
-                        console.log(vendedor.mensagem)
-                        res.status(401).json({token:null,tokenVendas:null,result:null})
-                    }else{       
-                        const result = await Consulta.vendedor(token)
-                        if(result.status == false){
-                            console.log(result.mensagem)
-                            res.status(401).json({token:null,result:null})
-                        }else{  
-                            res.status(200).json({token,tokenVendas,result})
-                        }
-                    }
-                }else{
-                    if(data["cpf"] == verificavendedor){        
-                        const result = await Consulta.vendedor(token)
-                        res.status(200).json({token,tokenVendas,result})
-                    }else{
-                        console.log('Cpf não vinculado ao vendedor. Verifique por favor.')
-                        res.status(200).json({token:null,tokenVendas:null,result:null})
-                    }
-                }   
-            }
+        var verifica =await  Funcao.validacpf(data['cpf'])
+        if(verifica == false){
+
+            console.log('Erro: Cpf Invalido')
+            res.status(401).json({token:null,tokenVenda:null,result:null})
         }else{
-            console.log('CPF invalido')
-            res.status(401).json({token:null,tokenVendas:null,result:null})     
+            result = await Cadastro.vendedor(token,data)
+            if(result.status== false){
+                console.log(result)
+                if(result.id_vendedor== null){
+                    console.log("Erro: não é vendedor")
+                    res.status(200).json({token,tokenVenda:null,result})
+                }else{
+                    tokenVenda = Funcao.gerajwt(result.id_vendedor)
+                    res.status(200).json({token,tokenVenda,result})
+                }
+            }else{
+                tokenVenda = Funcao.gerajwt(result.id_vendedor)
+                res.status(401).json({token,tokenVenda,result})
+            }
         }
-    }else{
-        const result = await Consulta.vendedor(token)
-        if(result.status == false){
-            console.log('Cpf já cadastrado!!')
-            console.log(result.mensagem)
-            res.status(401).json({token:null,tokenVendas:null,result:null})
-        }else{  
-            res.status(200).json({token,tokenVendas,result})
-        }
-    }
-    }
-}
     }
 })
 router.get('/buscar', async (req, res, ) => {

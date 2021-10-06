@@ -5,7 +5,6 @@ import Cadastro from '../Banco/migrations/insert'
 import multer from 'multer'
 const fs = require('fs');
 const path = require("path");
-import { Token } from 'sucrase/dist/parser/tokenizer'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -24,8 +23,14 @@ const parser = multer({ storage: storage })
 const router = express.Router()
 
 router.get('/uploads/:id', async (req, res) => {
-    let filepath = path.join(__dirname + `/../../uploads/anuncio/${req.params.id}`);
-    res.sendFile(filepath);
+    var { id } = req.params
+    var filepath = await Consulta.fotoAnuncio(id)
+    if (filepath.status == false) {
+        console.log(filepath.mensagem)
+       res.status(401).json({ filepath: null })
+    } else {
+        res.status(200).sendFile(filepath)
+    }
 });
 router.post('/inserir', parser.single('imagem'), async (req, res, next) => {
 
@@ -42,6 +47,7 @@ router.post('/inserir', parser.single('imagem'), async (req, res, next) => {
         console.log(anuncio.mensagem)
         res.status(401).json({ token: null })
     } else {
+        console.log(anuncio.file)
         const idAnuncio = await Cadastro.anuncio(token, anuncio)
         if (idAnuncio.status == false) {
             console.log(idAnuncio.mensagem)
