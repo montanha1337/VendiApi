@@ -1,6 +1,7 @@
 import Banco from '../connect'
 import Funcoes from '../../controller/functions'
 import Consulta from './consulta'
+import { isFunctionScopedDeclaration } from 'sucrase/dist/parser/tokenizer'
 
 
 async function updateTable(tabela,campoUpdate,valorUpdate,campoBusca, valorBusca) {
@@ -28,6 +29,14 @@ async function updateTable(tabela,campoUpdate,valorUpdate,campoBusca, valorBusca
     
   }
   async function atualizaVendedor(tabela,campo,dado,dadoPesquisa) {
+    if(campo =='cpf'){
+      const verifica = await Funcoes.validacpf(dado)
+      if(verifica == false){
+        const erro = Funcoes.padraoErro("não será possivel alterar o CPF, pois está inválido")
+        console.log(erro.mensagem)
+        return erro
+      }
+    }else{
     var script = `select ${campo} from Vendi.user  left outer join Vendi.pessoa    on pessoa.id_user=   Vendi.user.id_user left outer join Vendi.telefone  on telefone.id_pessoa= pessoa.id_pessoa left outer join Vendi.endereco  on endereco.id_pessoa= pessoa.id_pessoa left outer join Vendi.vendedor  on vendedor.id_pessoa= pessoa.id_pessoa where ${campo}='${dado}' `
     const banco    = await Banco.session()
     var result = await banco.query(script)
@@ -44,6 +53,7 @@ async function updateTable(tabela,campoUpdate,valorUpdate,campoBusca, valorBusca
         console.log(`erro ao realizar o update da tabela ${tabela}, por favor verifique.`)
         return Funcoes.padraoErro(`erro ao realizar o update da tabela ${tabela}, por favor verifique.`)
       }
+    }
     }
   
 }

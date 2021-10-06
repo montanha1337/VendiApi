@@ -42,8 +42,7 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
   }
 })
 router.get('/testeToken', async (req, res, ) => {
-  const Bearer = req.headers.authorization.replace(/^Bearer\s/, '');
-  console.log(Bearer)
+  const Bearer = req.body.token
   const id= Funcao.verificajwt(Bearer) 
   res.json(id)
 })

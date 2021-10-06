@@ -49,7 +49,8 @@ async function vendedor(token) {
       return erro
     }
   }
-  async function pessoacpf(token) {
+  async function pessoacpf(token,cpf) {
+    var json = Object ()
     const user     = await verificaUser(token)
     if(user.status== false){
       const erro = Funcoes.padraoErro("nao foi possivel identificar o usuario da requisição")
@@ -57,12 +58,22 @@ async function vendedor(token) {
     }else{
       const banco    = await Banco.session()
       const pessoa = await banco.query('select p.cpf from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where u.id_user = $1 ',[user])
-      if(pessoa.rows[0]==null){
-        return Funcoes.padraoErro("nao foi encontrado resultados na base de dados para o Cpf informado")
+      if(pessoa.rows[0].cpf==null){
+        json.status = true
+        json.mensagem = 'CPF não encontrado'
+        return json
+      }else{
+        if(pessoa.rows[0].cpf == cpf){
+          const erro = Funcoes.padraoErro('Cpf já existe.')  
+          return erro
+        }else{
+          json.status = true
+          json.mensagem = 'CPF não pertence ao usuario.'
+          return json
       }
-        return pessoa.rows[0].cpf
     }
   }
+}
   async function categoria() {
     const banco    = await Banco.session()
     const categoria = await banco.query('select c.id_categoria, c.descricao from Vendi.categoria c')
@@ -92,13 +103,11 @@ async function vendedor(token) {
     }
   }
   async function anuncio(categoria,pagina) {
-    var i
-    var c=1
       const banco    = await Banco.session()
       const anuncio = await banco.query('select a.id_anuncio,u.nome as vendedor, e.cidade,a.id_categoria, a.titulo, a.descricao, cast( a.valor as numeric) as valor, a.dataanuncio, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_categoria = $1 LIMIT 10 OFFSET($2 - 1) * 10',[categoria,pagina])
 
       if(anuncio.rows[0]){
-        
+
           return anuncio.rows
         }
         const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
@@ -114,12 +123,11 @@ async function vendedor(token) {
         resultAnuncio.vendedor= anuncio.rows[0].vendedor,
         resultAnuncio.cidade= anuncio.rows[0].cidade,
         resultAnuncio.idCategoria= anuncio.rows[0].id_categoria,
-        resultAnuncio.titulo= anuncio.rows[0].titulo,
-        resultAnuncio.descricao= anuncio.rows[0].descricao,
-        console.log(anuncio.rows[0].valor)
+        resultAnuncio.titulo= anuncio.rows[0].titulo
+        resultAnuncio.descricao= anuncio.rows[0].descricao
         resultAnuncio.valor= parseFloat(anuncio.rows[0].valor)
         resultAnuncio.dataAnuncio= anuncio.rows[0].dataanuncio,
-        resultAnuncio.linkfoto= anuncio.rows[0].linkfoto
+        resultAnuncio.linkfoto= ("http://localhost:8080/anuncio/uploads/"+ anuncio.rows[0].linkfoto)
           return [resultAnuncio]
         }
         const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
@@ -176,9 +184,19 @@ async function validaVendedor(token) {
   }
 }
 
+async function fotoAnuncio(linkFoto) {
+  const banco    = await Banco.session()
+  const anuncio = await banco.query(`select f.linkfoto from Vendi.foto f where f.linkFoto = '${linkFoto}'`)
+  if(anuncio.rows[0]){
+    anuncio.rows[0].linkfoto= (`${process.cwd()}/uploads/anuncio/${anuncio.rows[0].linkfoto}`)
+    return anuncio.rows[0].linkfoto
+  }
+  const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
+  return erro
+}
 
    
   
 
 
-module.exports = {vendedor,cliente, pessoacpf, categoria,  perfil, anuncio, anuncioLista, selectTable, verificaUser, verificaVendedor, validaVendedor}
+module.exports = {vendedor,cliente, pessoacpf, categoria,  perfil, anuncio, anuncioLista, selectTable, verificaUser, verificaVendedor, validaVendedor, fotoAnuncio}
