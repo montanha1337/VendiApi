@@ -127,7 +127,7 @@ async function vendedor(token) {
         resultAnuncio.descricao= anuncio.rows[0].descricao
         resultAnuncio.valor= parseFloat(anuncio.rows[0].valor)
         resultAnuncio.dataAnuncio= anuncio.rows[0].dataanuncio,
-        resultAnuncio.linkfoto= ("http://localhost:8080/anuncio/uploads/"+ anuncio.rows[0].linkfoto)
+        resultAnuncio.linkfoto=anuncio.rows[0].linkfoto
           return [resultAnuncio]
         }
         const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
@@ -188,7 +188,6 @@ async function fotoAnuncio(linkFoto) {
   const banco    = await Banco.session()
   const anuncio = await banco.query(`select f.linkfoto from Vendi.foto f where f.linkFoto = '${linkFoto}'`)
   if(anuncio.rows[0]){
-    anuncio.rows[0].linkfoto= (`${process.cwd()}/uploads/anuncio/${anuncio.rows[0].linkfoto}`)
     return anuncio.rows[0].linkfoto
   }
   const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")

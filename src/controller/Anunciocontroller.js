@@ -3,8 +3,7 @@ import Funcao from './functions'
 import Consulta from '../Banco/migrations/consulta'
 import Cadastro from '../Banco/migrations/insert'
 import multer from 'multer'
-const fs = require('fs');
-const path = require("path");
+import fs       from 'fs'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -24,13 +23,8 @@ const router = express.Router()
 
 router.get('/uploads/:id', async (req, res) => {
     var { id } = req.params
-    var filepath = await Consulta.fotoAnuncio(id)
-    if (filepath.status == false) {
-        console.log(filepath.mensagem)
-       res.status(401).json({ filepath: null })
-    } else {
+    var filepath = `${process.cwd()}/uploads/anuncio/${id}`
         res.status(200).sendFile(filepath)
-    }
 });
 router.post('/inserir', parser.single('imagem'), async (req, res, next) => {
 

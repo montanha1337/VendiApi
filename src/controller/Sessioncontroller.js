@@ -4,17 +4,21 @@ import Funcao from './functions'
 import Banco from '../Banco/connect'
 import Cadastro from '../Banco/migrations/insert'
 import Consulta from '../Banco/migrations/consulta'
+import fs       from 'fs'
 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, `${__dirname}/uploads/avatar`)
+        fs.mkdir('./uploads/avatar', (err) => {
+            cb(null, './uploads/avatar');
+        });
     },
     filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.originalname)
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, uniqueSuffix + file.originalname)
     }
-  })
+})
+
   const parser = multer({ storage: storage })
 const router = express.Router()
 
@@ -122,11 +126,11 @@ router.post('/avatar',parser.single('imagem'), async (req, res, ) => {
      token = Funcao.atualizajwt(token) 
      if(token.status == false){
          console.log(token.mensagem)
-         res.status(401).json({token:[],perfil:[]})
+         res.status(401).json({token:[],perfil:[]}) 
      }else{
          const perfil = await Consulta.perfil(token)
-         if(token.status == false){
-             console.log(token.mensagem)
+         if(perfil.status == false){
+             console.log(perfil.mensagem)
              res.status(401).json({token:[],perfil:[]})
          }else{
          res.status(200).json({token,perfil})
