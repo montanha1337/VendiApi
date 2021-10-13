@@ -4,8 +4,7 @@ import Atualiza from '../Banco/migrations/database'
 import EnvioEmail from '../config/configemail'
 import bcrypt from 'bcrypt'
 import multer from 'multer'
-
-const parser = multer({ dest: 'uploads' })
+import { unlink } from 'fs/promises';
 
 var salt = bcrypt.genSaltSync(10)
 
@@ -114,9 +113,9 @@ async function verificaconexao(mensagem){
         }
         return true;
     }
-    async function baixarImagem(imagem) {
-       const img= parser.single('imagem')
-        return img
+    function stringImagem() {
+        const result = 'http://localhost:8080/anuncio/uploads/'
+        return result
     }
     async function atualizabanco(){
         const {rows} = await Atualiza.criaconexao()
@@ -136,6 +135,14 @@ async function verificaconexao(mensagem){
         const texto = rows
         return texto
     }
+    async function deletaFoto(caminho) {
+        var teste = await unlink(caminho);
+        if(teste){
+            return teste
+        }else{
+            const erro = padraoErro(`Erro ao deletar o caminho ${caminho}`)
+            return erro
+        }
+    }
 
-
-module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, atualizabanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, baixarImagem}
+module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, atualizabanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, stringImagem, deletaFoto}

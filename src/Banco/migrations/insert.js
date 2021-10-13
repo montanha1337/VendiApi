@@ -33,6 +33,7 @@ async function vendedor(token,data) {
     }
   }
   async function avatar(token,caminho) {
+    console.log(caminho)
     const user = await Consulta.verificaUser(token) 
     if(user.status== false){
       const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
@@ -66,11 +67,12 @@ async function vendedor(token,data) {
     }else{
       const banco          = await Banco.session()
       const {id_vendedor}  = await Consulta.vendedor(token)
-                             await banco.query('INSERT INTO vendi.anuncio(id_vendedor, id_categoria, titulo, descricao, valor,dataanuncio)VALUES ($1, $2, $3, $4, $5, $6);',[id_vendedor,anuncio["categoria"],anuncio["titulo"],anuncio["descricao"],anuncio["valor"],anuncio["data"],])
+                             await banco.query('INSERT INTO vendi.anuncio(id_vendedor, id_categoria, titulo, descricao, valor,dataanuncio, classificacao)VALUES ($1, $2, $3, $4, $5, $6, $7);',[id_vendedor,anuncio["categoria"],anuncio["titulo"],anuncio["descricao"],anuncio["valor"],anuncio["data"],anuncio["classificacao"]])
       const novoAnuncio    = await banco.query('SELECT MAX(id_anuncio) FROM Vendi.anuncio')
       const id_anuncio     = novoAnuncio.rows[0].max 
       const imagem            = anuncio["file"]
-      const avatar         = imagemAnuncio(id_anuncio,imagem.filename)
+
+      const avatar         = imagemAnuncio(id_anuncio,Funcoes.stringImagem()+imagem.filename)
       return novoAnuncio.rows[0].max
     }
 }
@@ -80,12 +82,19 @@ async function cliente(token,data) {
     const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
     return erro
   }else{
+
     const banco    = await Banco.session()
     await banco.query('INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= $1),$2);',[user,data["cpf"]])
-    const pessoa = await banco.query('select id_pessoa from Vendi.pessoa p where p.id_user= $1',[user])
+    const pessoa = await banco.query('select id_pessoa from Vendi.pessoa p where p.cpf= $1',[data["cpf"]])
     await banco.query('INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2,$3);',[pessoa.rows[0].id_pessoa,data.telefone,data["whatsapp"]])
     await banco.query('INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2,$3,$4,$5,$6);',[pessoa.rows[0].id_pessoa,data["rua"],data["bairro"],data["cidade"],data["numero"],data["cep"]])
-    return true
+    const cliente = await banco.query('select p.id_pessoa, u.nome, p.cpf, t.telefone, e.cidade, t.whatsapp, e.rua, e.bairro, e.cidade, e.numero, e.cep  from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where p.cpf = $1 ',[data["cpf"]])
+    if(cliente.rows[0]){
+      return cliente.rows[0]
+    }
+    const erro = Funcoes.padraoErro("nao foi encontrado resultados na base de dados para o Cliente")
+    return erro
+  
   }
 }
 async function userTeste(password) {
@@ -95,14 +104,15 @@ async function userTeste(password) {
 }
 async function deletaAnuncio(id,token) {
   const vendedor = await Consulta.validaVendedor(token)
-  console.log(vendedor)
   if(vendedor.status== false){
     const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
     return erro
   }else{
   const banco    = await Banco.session()
-  const teste = await banco.query("delete from Vendi.anuncio  cascate where anuncio.id_anuncio= $1 ",[id])
-  console.log(teste)
+  var foto = await banco.query('select linkfoto from Vendi.foto where id_anuncio =$1', [id])
+  var anuncio = await banco.query("delete from Vendi.foto where id_anuncio = $1",[id])
+  foto = await Funcoes.deletaFoto(`${process.cwd()}/uploads/anuncio/${foto.rows[0].linkfoto.substring(38)}`)
+  anuncio = await banco.query("delete from Vendi.anuncio where id_anuncio = $1;",[id])
   return true
   }
 }

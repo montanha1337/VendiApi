@@ -2,8 +2,8 @@ import express from 'express'
 import Funcao from './functions'
 import Consulta from '../Banco/migrations/consulta'
 import Cadastro from '../Banco/migrations/insert'
+import Delete from '../Banco/migrations/deletar'
 import Editar from '../Banco/migrations/editar'
-
 
 const router = express.Router()
 
@@ -126,5 +126,18 @@ router.put('/classificar', async (req, res, ) => {
     res.status(200).json({classificacao})
         }
 })
+
+router.delete('/deletar', async (req, res,) => {
+    var token = req.headers.authorization.replace(/^Bearer\s/, '')
+    token = Funcao.atualizajwt(token)
+    const vendedor = await Delete.vendedor(token)
+    if (vendedor.status == false) {
+        console.log(vendedor.mensagem)
+        res.status(200).json({token, vendedor: [] })
+    } else {
+        res.status(200).json({token, vendedor })
+    }
+})
+
 
 module.exports = router
