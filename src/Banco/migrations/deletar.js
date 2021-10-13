@@ -28,9 +28,7 @@ async function vendedor(token) {
                 }
                 await banco.query("delete from Vendi.anuncio where id_vendedor = $1;",[vendedor.id_vendedor])
                 await banco.query("delete from Vendi.vendedor where id_vendedor = $1;",[vendedor.id_vendedor])
-                await banco.query("delete from Vendi.endereco where id_pessoa = $1",[vendedor.id_pessoa])
-                await banco.query("delete from Vendi.telefone where id_pessoa = $1",[vendedor.id_pessoa])
-                await banco.query("delete from Vendi.pessoa where id_pessoa = $1",[vendedor.id_pessoa])
+                await cliente(token)
                 vendedor.status = 'Deletado'
                 return vendedor
             }
