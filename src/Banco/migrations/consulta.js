@@ -104,7 +104,7 @@ async function vendedor(token) {
   }
   async function anuncio(categoria,pagina) {
       const banco    = await Banco.session()
-      const anuncio = await banco.query('select a.id_anuncio,u.nome as vendedor, e.cidade,a.id_categoria, a.titulo, a.descricao, cast( a.valor as numeric) as valor, a.dataanuncio, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_categoria = $1 LIMIT 10 OFFSET($2 - 1) * 10',[categoria,pagina])
+      const anuncio = await banco.query('select a.id_anuncio,u.nome as vendedor, e.cidade,a.id_categoria, a.titulo, a.descricao, cast( a.valor as numeric) as valor, a.dataanuncio, a.classificacao, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_categoria = $1 LIMIT 10 OFFSET($2 - 1) * 10',[categoria,pagina])
 
       if(anuncio.rows[0]){
 
@@ -127,7 +127,7 @@ async function vendedor(token) {
         resultAnuncio.descricao= anuncio.rows[0].descricao
         resultAnuncio.valor= parseFloat(anuncio.rows[0].valor)
         resultAnuncio.dataAnuncio= anuncio.rows[0].dataanuncio,
-        resultAnuncio.linkfoto= ("http://localhost:8080/anuncio/uploads/"+ anuncio.rows[0].linkfoto)
+        resultAnuncio.linkfoto=anuncio.rows[0].linkfoto
           return [resultAnuncio]
         }
         const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
@@ -188,7 +188,6 @@ async function fotoAnuncio(linkFoto) {
   const banco    = await Banco.session()
   const anuncio = await banco.query(`select f.linkfoto from Vendi.foto f where f.linkFoto = '${linkFoto}'`)
   if(anuncio.rows[0]){
-    anuncio.rows[0].linkfoto= (`${process.cwd()}/uploads/anuncio/${anuncio.rows[0].linkfoto}`)
     return anuncio.rows[0].linkfoto
   }
   const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
