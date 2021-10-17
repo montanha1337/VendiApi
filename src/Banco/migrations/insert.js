@@ -33,7 +33,6 @@ async function vendedor(token,data) {
     }
   }
   async function avatar(token,caminho) {
-    console.log(caminho)
     const user = await Consulta.verificaUser(token) 
     if(user.status== false){
       const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
