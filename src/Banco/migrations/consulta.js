@@ -194,8 +194,21 @@ async function fotoAnuncio(linkFoto) {
   return erro
 }
 
+async function anuncioNegocicao(idAnuncio) {
+  const banco    = await Banco.session()
+  var anuncio = await banco.query(`select a.titulo, t.telefone from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor = a.id_vendedor left outer join Vendi.telefone t on t.id_pessoa = v.id_pessoa where a.id_anuncio = ${idAnuncio} and t.whatsapp = 'true'`)
+  if(anuncio.rows[0]){
+    anuncio.descricao = anuncio.rows[0].titulo.replace(' ', '%20')
+    anuncio.telefone = anuncio.rows[0].telefone
+    return anuncio
+  }
+  const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
+  return erro
+}
+
+
    
   
 
 
-module.exports = {vendedor,cliente, pessoacpf, categoria,  perfil, anuncio, anuncioLista, selectTable, verificaUser, verificaVendedor, validaVendedor, fotoAnuncio}
+module.exports = {vendedor,cliente, pessoacpf, categoria,  perfil, anuncio, anuncioLista, selectTable, verificaUser, verificaVendedor, validaVendedor, fotoAnuncio, anuncioNegocicao}

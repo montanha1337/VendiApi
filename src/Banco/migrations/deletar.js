@@ -1,6 +1,7 @@
 import Banco from '../connect'
 import Funcoes from '../../controller/functions'
 import Consulta from './consulta'
+import fs       from 'fs'
 
 async function vendedor(token) {
     const user     = await Consulta.verificaUser(token)
@@ -83,6 +84,20 @@ async function anuncio(id,token) {
   return true
   }
 }
+function deleteArquivos(caminho) {
+
+    fs.readdir(`${process.cwd()}/uploads/${caminho}/`, (err, files) => {
+        if (err)
+          console.log(err);
+        else {
+          console.log(`\nCurrent directory ${caminho} filenames deleted:`);
+          files.forEach(file => {
+              console.log(file)
+            Funcoes.deletaFoto(`${process.cwd()}/uploads/${caminho}/${file}`)
+          })
+        }
+      })
+}
 
 
-module.exports = { vendedor, user, cliente, anuncio}
+module.exports = { vendedor, user, cliente, anuncio, deleteArquivos}

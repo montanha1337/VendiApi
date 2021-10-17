@@ -122,7 +122,7 @@ router.post('/avatar',parser.single('imagem'), async (req, res, ) => {
      
      const file = req.file
      var token = req.headers.authorization.replace(/^Bearer\s/, '')
-     await Cadastro.avatar(token,file.path)
+     await Cadastro.avatar(token,"http://localhost:8080/user/uploads/"+file.filename)
      token = Funcao.atualizajwt(token) 
      if(token.status == false){
          console.log(token.mensagem)
@@ -137,5 +137,10 @@ router.post('/avatar',parser.single('imagem'), async (req, res, ) => {
          }
      }
 })
+router.get('/uploads/:id', async (req, res) => {
+    var { id } = req.params
+    var filepath = `${process.cwd()}/uploads/avatar/${id}`
+        res.status(200).sendFile(filepath)
+});
 
 module.exports = router

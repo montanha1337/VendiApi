@@ -2,7 +2,9 @@ import express  from  'express'
 import Banco    from  '../Banco/connect'
 import Funcao   from  './functions'
 import Database from  '../Banco/migrations/database'
+import Delete from '../Banco/migrations/deletar'
 import Editar from '../Banco/migrations/editar'
+
 
 const router = express.Router()
 
@@ -35,8 +37,12 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
   const result = await banco.query("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
 
   if(result.rows[0].count==7){
-    const conexao =await Funcao.verificaconexao(3)
-    Database.deletaschema()
+    const conexao =await Funcao.verificaconexao(3) 
+    Database.deletaschema()      
+    Delete.deleteArquivos("avatar")
+    Delete.deleteArquivos("anuncio")
+   
+
     res.json(conexao)
   }else{
   }
