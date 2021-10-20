@@ -4,10 +4,10 @@ import {Pool} from 'pg'
 // deve-se ao instalar o banco de dados colocar #abc123# no password
 
 const connection = new Pool({
-  user: 'otapiikouggzhm',
-  host: 'ec2-54-92-230-7.compute-1.amazonaws.com',
-  database: 'd2ojfb67t0ob7b',
-  password: '97a2dd65c6ab89c46e5b418e6279584c9ce9a4cee7910b449a0dfc5344d50fbb',
+  user: 'postgres',
+  host: 'localhost',
+  database: 'Vendi',
+  password: '#abc123#',
   port: 5432,
   connectionTimeoutMillis: 1500
 })
