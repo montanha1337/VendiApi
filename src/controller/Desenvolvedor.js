@@ -28,7 +28,7 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
       const texto= await Funcao.verificaconexao(1)
       res.json(texto)
     }
-    //res.json({result})
+    //SELECT table_name, column_name FROM information_schema.columns WHERE table_schema = 'vendi';
 })
  // rota de deletar de banco de dados.
  router.get('/deletaBanco',async(req,res)=>{

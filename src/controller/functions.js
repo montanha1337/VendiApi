@@ -3,7 +3,6 @@ import Chave from '../Banco/connect'
 import Atualiza from '../Banco/migrations/database'
 import EnvioEmail from '../config/configemail'
 import bcrypt from 'bcrypt'
-import multer from 'multer'
 import { unlink } from 'fs/promises';
 
 var salt = bcrypt.genSaltSync(10)
@@ -113,7 +112,7 @@ async function verificaconexao(mensagem){
         return true;
     }
     function stringImagem() {
-        const result = 'http://localhost:8080/anuncio/uploads/'
+        const result = 'https://vendiapi.herokuapp.com/anuncio/uploads/'
         return result
     }
     async function atualizabanco(){

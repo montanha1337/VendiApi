@@ -17,12 +17,11 @@ async function vendedor(token,data) {
           return pessoa
         }
       }else{
-        const banco    = await Banco.session()
-        await banco.query('INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= $1),$2);',[user,data["cpf"]])
-        pessoa = await banco.query('select id_pessoa from Vendi.pessoa p where p.id_user= $1',[user])
-        await banco.query('INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ($1,$2,$3);',[pessoa.rows[0].id_pessoa,data.telefone,data["whatsapp"]])
-        await banco.query('INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ($1,$2,$3,$4,$5,$6);',[pessoa.rows[0].id_pessoa,data["rua"],data["bairro"],data["cidade"],data["numero"],data["cep"]])
-        await banco.query('INSERT INTO vendi.vendedor(id_pessoa,classificacao) VALUES ($1,$2);',[pessoa.rows[0].id_pessoa,data["classificacao"]])
+        await Banco.session(`INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= ${user}),${data["cpf"]});`)
+        pessoa = await Banco.session(`select id_pessoa from Vendi.pessoa p where p.id_user= ${user}`)
+        await Banco.session(`INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES (${pessoa.rows[0].id_pessoa},${data.telefone},${data["whatsapp"]});`)
+        await Banco.session(`INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES (${pessoa.rows[0].id_pessoa},${data["rua"]},${data["bairro"]},${data["cidade"]},${data["numero"]},${data["cep"]});`)
+        await Banco.session(`INSERT INTO vendi.vendedor(id_pessoa,classificacao) VALUES (${pessoa.rows[0].id_pessoa},${data["classificacao"]});`)
         pessoa= await Consulta.vendedor(token)
         if(pessoa.status== false){
           return pessoa
@@ -38,8 +37,7 @@ async function vendedor(token,data) {
       const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
       return erro
     }else{
-      const banco = await Banco.session()
-      const avatar = await banco.query('UPDATE vendi."user" SET linkfoto=$1 WHERE id_user=$2;',[caminho,user])
+      const avatar = await Banco.session(`UPDATE vendi."user" SET linkfoto=${caminho} WHERE id_user=${user};`)
       if(avatar.rowCount==1){
       return true
       }else{
@@ -49,8 +47,7 @@ async function vendedor(token,data) {
     }
   }
   async function imagemAnuncio(anuncio,caminho) {
-      const banco = await Banco.session()
-      const avatar = await banco.query('INSERT INTO vendi.foto(id_anuncio, linkfoto) VALUES ( $2, $1);',[caminho,anuncio])
+      const avatar = await Banco.session(`INSERT INTO vendi.foto(id_anuncio, linkfoto) VALUES ( ${anuncio}, ${caminho});`)
       if(avatar.rowCount==1){
       return true
       }else{
@@ -64,10 +61,9 @@ async function vendedor(token,data) {
       const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
       return erro
     }else{
-      const banco          = await Banco.session()
       const {id_vendedor}  = await Consulta.vendedor(token)
-                             await banco.query('INSERT INTO vendi.anuncio(id_vendedor, id_categoria, titulo, descricao, valor,dataanuncio, classificacao)VALUES ($1, $2, $3, $4, $5, $6, $7);',[id_vendedor,anuncio["categoria"],anuncio["titulo"],anuncio["descricao"],anuncio["valor"],anuncio["data"],anuncio["classificacao"]])
-      const novoAnuncio    = await banco.query('SELECT MAX(id_anuncio) FROM Vendi.anuncio')
+                             await Banco.session(`INSERT INTO vendi.anuncio(id_vendedor, id_categoria, titulo, descricao, valor,dataanuncio, classificacao)VALUES (${id_vendedor}, ${anuncio["categoria"]}, ${anuncio["titulo"]}, ${anuncio["descricao"]}, ${anuncio["valor"]}, ${anuncio["data"]}, ${anuncio["classificacao"]});`)
+      const novoAnuncio    = await Banco.session(`SELECT MAX(id_anuncio) FROM Vendi.anuncio`)
       const id_anuncio     = novoAnuncio.rows[0].max 
       const imagem            = anuncio["file"]
 
@@ -81,13 +77,11 @@ async function cliente(token,data) {
     const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
     return erro
   }else{
-
-    const banco    = await Banco.session()
-    await banco.query('INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= $1),$2);',[user,data["cpf"]])
-    const pessoa = await banco.query('select id_pessoa from Vendi.pessoa p where p.cpf= $1',[data["cpf"]])
-    await banco.query('INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2,$3);',[pessoa.rows[0].id_pessoa,data.telefone,data["whatsapp"]])
-    await banco.query('INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= $1),$2,$3,$4,$5,$6);',[pessoa.rows[0].id_pessoa,data["rua"],data["bairro"],data["cidade"],data["numero"],data["cep"]])
-    const cliente = await banco.query('select p.id_pessoa, u.nome, p.cpf, t.telefone, e.cidade, t.whatsapp, e.rua, e.bairro, e.cidade, e.numero, e.cep  from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where p.cpf = $1 ',[data["cpf"]])
+    await Banco.session(`INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= ${user}),${data["cpf"]});`)
+    const pessoa = await Banco.session(`select id_pessoa from Vendi.pessoa p where p.cpf= ${data["cpf"]}`)
+    await Banco.session(`INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= ${pessoa.rows[0].id_pessoa}),${data.telefone},${data["whatsapp"]});`)
+    await Banco.session(`INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= ${pessoa.rows[0].id_pessoa}),${data["rua"]},${data["bairro"]},${data["cidade"]},${data["numero"]},${data["cep"]});`)
+    const cliente = await Banco.session(`select p.id_pessoa, u.nome, p.cpf, t.telefone, e.cidade, t.whatsapp, e.rua, e.bairro, e.cidade, e.numero, e.cep  from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where p.cpf = ${data["cpf"]} `)
     if(cliente.rows[0]){
       return cliente.rows[0]
     }
@@ -97,8 +91,7 @@ async function cliente(token,data) {
   }
 }
 async function userTeste(password) {
-  const banco    = await Banco.session()
-  await banco.query("INSERT INTO Vendi.user(email, senha, nome)VALUES ('teste@teste.com',$1,'Desenvolvedor');",[password])
+  await Banco.session(`INSERT INTO Vendi.user(email, senha, nome)VALUES ('teste@teste.com',${password},'Desenvolvedor');`)
   return true
 }
 async function deletaAnuncio(id,token) {
@@ -107,11 +100,10 @@ async function deletaAnuncio(id,token) {
     const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
     return erro
   }else{
-  const banco    = await Banco.session()
-  var foto = await banco.query('select linkfoto from Vendi.foto where id_anuncio =$1', [id])
-  var anuncio = await banco.query("delete from Vendi.foto where id_anuncio = $1",[id])
+  var foto = await Banco.session(`select linkfoto from Vendi.foto where id_anuncio =${id}`)
+  var anuncio = await Banco.session(`delete from Vendi.foto where id_anuncio = =${id}`)
   foto = await Funcoes.deletaFoto(`${process.cwd()}/uploads/anuncio/${foto.rows[0].linkfoto.substring(38)}`)
-  anuncio = await banco.query("delete from Vendi.anuncio where id_anuncio = $1;",[id])
+  anuncio = await Banco.session(`delete from Vendi.anuncio where id_anuncio = =${id}`)
   return true
   }
 }

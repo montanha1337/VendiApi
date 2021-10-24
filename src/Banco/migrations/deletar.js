@@ -16,22 +16,21 @@ async function vendedor(token) {
                 const erro = Funcoes.padraoErro("Vendedor não encontrado")
                 return erro
             }else{
-                const banco    = await Banco.session()
-                const pessoa = await banco.query("select id_pessoa from Vendi.vendedor where id_vendedor = $1",[vendedor.id_vendedor])
+                const pessoa = await Banco.session(`select id_pessoa from Vendi.vendedor where id_vendedor = ${vendedor.id_vendedor}`)
                 vendedor.id_pessoa = pessoa.rows[0].id_pessoa
-                var n = await banco.query('select count(f.id_anuncio) as vx from Vendi.anuncio a left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_vendedor = $1', [ vendedor.id_vendedor])
-                var anuncio = await banco.query('select linkfoto, a.id_anuncio, f.id_foto from Vendi.anuncio a left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_vendedor = $1', [ vendedor.id_vendedor])
+                var n = await Banco.session(`select count(f.id_anuncio) as vx from Vendi.anuncio a left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_vendedor = ${vendedor.id_vendedor}`)
+                var anuncio = await Banco.session(`select linkfoto, a.id_anuncio, f.id_foto from Vendi.anuncio a left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_vendedor = ${vendedor.id_vendedor}`)
                 for (var i = 0; i < n.rows[0].vx; i++) {
-                    await banco.query("select id_pessoa from Vendi.vendedor where id_vendedor = $1",[vendedor.id_vendedor]) 
-                    var foto = await banco.query('select linkfoto from Vendi.anuncio a left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where f.id_foto = $1', [anuncio.rows[i].id_foto ])
-                    await banco.query("delete from Vendi.foto where id_anuncio = $1",[anuncio.rows[i].id_anuncio])
+                    await Banco.session(`select id_pessoa from Vendi.vendedor where id_vendedor = ${vendedor.id_vendedor}`) 
+                    var foto = await Banco.session(`select linkfoto from Vendi.anuncio a left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where f.id_foto = ${anuncio.rows[i].id_foto}`)
+                    await Banco.session(`delete from Vendi.foto where id_anuncio = ${anuncio.rows[i].id_anuncio}`)
                     await Funcoes.deletaFoto(`${process.cwd()}/uploads/anuncio/${foto.rows[0].linkfoto.substring(38)}`)
                 }
-                await banco.query("delete from Vendi.anuncio where id_vendedor = $1;",[vendedor.id_vendedor])
-                await banco.query("delete from Vendi.vendedor where id_vendedor = $1;",[vendedor.id_vendedor])
-                await banco.query("delete from Vendi.endereco where id_pessoa = $1",[vendedor.id_pessoa])
-                await banco.query("delete from Vendi.telefone where id_pessoa = $1",[vendedor.id_pessoa])
-                await banco.query("delete from Vendi.pessoa where id_pessoa = $1",[vendedor.id_pessoa])
+                await Banco.session(`delete from Vendi.anuncio where id_vendedor = ${vendedor.id_vendedor}`)
+                await Banco.session(`delete from Vendi.vendedor where id_vendedor = ${vendedor.id_vendedor}`)
+                await Banco.session(`delete from Vendi.endereco where id_pessoa = ${vendedor.id_pessoa}`)
+                await Banco.session(`delete from Vendi.telefone where id_pessoa = ${vendedor.id_pessoa}`)
+                await Banco.session(`delete from Vendi.pessoa where id_pessoa = ${vendedor.id_pessoa}`)
                 vendedor.status = 'Deletado'
                 return vendedor
             }
@@ -51,10 +50,9 @@ async function cliente(token) {
                 const erro = Funcoes.padraoErro("Cliente não existe!!!")
                 return erro
             }else{
-                const banco    = await Banco.session()
-                await banco.query("delete from Vendi.endereco where id_pessoa = $1",[cliente.id_pessoa])
-                await banco.query("delete from Vendi.telefone where id_pessoa = $1",[cliente.id_pessoa])
-                await banco.query("delete from Vendi.pessoa where id_pessoa = $1",[cliente.id_pessoa])
+                await Banco.session(`delete from Vendi.endereco where id_pessoa = ${cliente.id_pessoa}`)
+                await Banco.session(`delete from Vendi.telefone where id_pessoa = ${cliente.id_pessoa}`)
+                await Banco.session(`delete from Vendi.pessoa where id_pessoa = ${cliente.id_pessoa}`)
                 cliente.status = 'Deletado'
                 return cliente
             }
@@ -76,11 +74,10 @@ async function anuncio(id,token) {
     const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
     return erro
   }else{
-  const banco    = await Banco.session()
-  var foto = await banco.query('select linkfoto from Vendi.foto where id_anuncio =$1', [id])
-  var anuncio = await banco.query("delete from Vendi.foto where id_anuncio = $1",[id])
+  var foto = await Banco.session(`select linkfoto from Vendi.foto where id_anuncio =${id}`)
+  var anuncio = await Banco.session(`delete from Vendi.foto where id_anuncio = ${id}`)
   foto = await Funcoes.deletaFoto(`${process.cwd()}/uploads/anuncio/${foto.rows[0].linkfoto.substring(38)}`)
-  anuncio = await banco.query("delete from Vendi.anuncio where id_anuncio = $1;",[id])
+  anuncio = await Banco.session(`delete from Vendi.anuncio where id_anuncio = ${id}`)
   return true
   }
 }

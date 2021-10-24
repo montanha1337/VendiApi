@@ -103,7 +103,7 @@ async function crianegociacao(){
   }
 }
 async function userTeste(password) {
-  await Banco.session("INSERT INTO Vendi.user(email, senha, nome)VALUES ('teste@teste.com',$1,'Desenvolvedor');",[password])
+  await Banco.session(`INSERT INTO Vendi.user(email, senha, nome)VALUES ('teste@teste.com',${password},'Desenvolvedor');`)
   return true
 }
 

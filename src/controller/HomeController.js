@@ -43,6 +43,6 @@ router.get('/anuncio/:categoria/:pagina', async (req, res, ) => {
         res.status(200).json({anuncio})
     }
 })
-//[ ]  buscar por vendedor anuncio,
+
 
 module.exports = router

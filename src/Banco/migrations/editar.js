@@ -1,19 +1,14 @@
 import Banco from '../connect'
 import Funcoes from '../../controller/functions'
 import Consulta from './consulta'
-import { isFunctionScopedDeclaration } from 'sucrase/dist/parser/tokenizer'
 
 
 async function updateTable(tabela,campoUpdate,valorUpdate,campoBusca, valorBusca) {
-        var script = `UPDATE Vendi.${tabela} SET ${campoUpdate}='${valorUpdate}' WHERE ${campoBusca}='${valorBusca}';`
-    const banco    = await Banco.session()
-    const result = await banco.query(script)
+    const result = await Banco.session(`UPDATE Vendi.${tabela} SET ${campoUpdate}='${valorUpdate}' WHERE ${campoBusca}='${valorBusca}';`)
     return true
   }
   async function atualizaCliente(tabela,campo,dado,dadoPesquisa) {
-      var script = `select ${campo} from Vendi.user  left outer join Vendi.pessoa    on pessoa.id_user=   Vendi.user.id_user left outer join Vendi.telefone  on telefone.id_pessoa= pessoa.id_pessoa left outer join Vendi.endereco  on endereco.id_pessoa= pessoa.id_pessoa where ${campo}='${dado}' `
-      const banco    = await Banco.session()
-      var result = await banco.query(script)
+      var result = await Banco.session(`select ${campo} from Vendi.user  left outer join Vendi.pessoa    on pessoa.id_user=   Vendi.user.id_user left outer join Vendi.telefone  on telefone.id_pessoa= pessoa.id_pessoa left outer join Vendi.endereco  on endereco.id_pessoa= pessoa.id_pessoa where ${campo}='${dado}' `)
       if(result.rows[0]){
         return true
       }else{
@@ -37,9 +32,7 @@ async function updateTable(tabela,campoUpdate,valorUpdate,campoBusca, valorBusca
         return erro
       }
     }else{
-    var script = `select ${campo} from Vendi.user  left outer join Vendi.pessoa    on pessoa.id_user=   Vendi.user.id_user left outer join Vendi.telefone  on telefone.id_pessoa= pessoa.id_pessoa left outer join Vendi.endereco  on endereco.id_pessoa= pessoa.id_pessoa left outer join Vendi.vendedor  on vendedor.id_pessoa= pessoa.id_pessoa where ${campo}='${dado}' `
-    const banco    = await Banco.session()
-    var result = await banco.query(script)
+      var result = await Banco.session(`select ${campo} from Vendi.user  left outer join Vendi.pessoa    on pessoa.id_user=   Vendi.user.id_user left outer join Vendi.telefone  on telefone.id_pessoa= pessoa.id_pessoa left outer join Vendi.endereco  on endereco.id_pessoa= pessoa.id_pessoa left outer join Vendi.vendedor  on vendedor.id_pessoa= pessoa.id_pessoa where ${campo}='${dado}' `)
     if(result.rows[0]){
       return true
     }else{
@@ -50,7 +43,6 @@ async function updateTable(tabela,campoUpdate,valorUpdate,campoBusca, valorBusca
         result = await Consulta.selectTable(tabela,campo,campo, dado)
         return result
       }else{
-        console.log(`erro ao realizar o update da tabela ${tabela}, por favor verifique.`)
         return Funcoes.padraoErro(`erro ao realizar o update da tabela ${tabela}, por favor verifique.`)
       }
     }
@@ -60,14 +52,13 @@ async function updateTable(tabela,campoUpdate,valorUpdate,campoBusca, valorBusca
 
 async function mediaClassificacao(vendedor,classificacao) {
   var mediaBanco
-      const banco    = await Banco.session()
-    var result = await banco.query("select classificacao from Vendi.vendedor v where v.id_vendedor= $1", [vendedor])
+    var result = await Banco.session(`select classificacao from Vendi.vendedor v where v.id_vendedor= ${vendedor}`)
     if(result.rows[0]){
       mediaBanco= parseFloat(result.rows[0].classificacao)
       classificacao = parseFloat(classificacao)
       classificacao= (mediaBanco + classificacao) / 2
-      await banco.query('update Vendi.vendedor set classificacao = $2 where id_vendedor=$1', [vendedor,classificacao])
-      classificacao = await banco.query('select classificacao from Vendi.vendedor where id_vendedor=$1', [vendedor])
+      await Banco.session(`update Vendi.vendedor set classificacao = ${classificacao} where id_vendedor=${vendedor}`)
+      classificacao = await Banco.session(`select classificacao from Vendi.vendedor where id_vendedor=${vendedor}`)
       return classificacao.rows[0].classificacao
     }
     const erro = Funcoes.padraoErro("Nao foi possivel realizar classificar o vendedor")
