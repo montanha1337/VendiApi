@@ -6,7 +6,7 @@ import Anuncio from './controller/Anunciocontroller'
 import Home from './controller/HomeController'
 import Cliente from './controller/ClienteController'
 import Negociacao from './controller/NegociacaoController'
-import PaginaInicial from './controller/tela/PaginaIncial.html'
+import PaginaInicial from './controller/tela/PaginaInicial.html'
 
 const routes = new Router();
 //olhar o final da rota 
