@@ -54,7 +54,7 @@ function atualizajwt(token){
 
 
 async function verificaconexao(mensagem){
-    const banco= await Chave.session("Select descricao from Vendi.Conexao con where con.id_conexao = $1",[mensagem])
+    const banco= await Chave.session(`Select descricao from Vendi.Conexao con where con.id_conexao = ${mensagem}`,)
 
     const texto = banco.rows[0]
       return texto
