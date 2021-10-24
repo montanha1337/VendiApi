@@ -19,7 +19,6 @@ client.connect();
 async function session(query) {
   console.log('Session: '+query)
   var conexao=client.query(query);
-  client.end()
   return conexao
 }
 const secreto = 'Desenvolvemosfuturo'
