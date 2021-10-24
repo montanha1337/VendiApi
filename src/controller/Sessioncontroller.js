@@ -9,8 +9,8 @@ import fs       from 'fs'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        fs.mkdir(`uploads/avatar`, (err) => {
-            cb(null, 'uploads/avatar');
+        fs.mkdir(`uploads/avatar/`, (err) => {
+            cb(null, 'uploads/avatar/');
         });
     },
     filename: function (req, file, cb) {
