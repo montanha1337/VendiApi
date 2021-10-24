@@ -49,7 +49,7 @@ router.post('/cadastro', async (req, res, ) => {
     const nome  = req.body.nome
     const email = req.body.email
     const senha = req.body.password    
-    const banco= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
+    const user= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
     if(user.rows[0]){
         const descript = await Funcao.compare(senha,user.rows[0].senha)        
         if(descript == true){
