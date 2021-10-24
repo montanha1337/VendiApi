@@ -9,7 +9,7 @@ const client = new Client({
   User:'odltvcxcrvlktv',
   Port:5432,
   Password:'910a2e991a078df3456e3c0df561cef3691662c53c5b13283c13c330ad39c2de',
-  URI:'postgres://odltvcxcrvlktv:910a2e991a078df3456e3c0df561cef3691662c53c5b13283c13c330ad39c2de@ec2-52-3-79-87.compute-1.amazonaws.com:5432/d862rgr5db37ii',
+  ssl: true,
   connectionTimeoutMillis: 1500
 })
 
