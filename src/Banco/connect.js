@@ -4,7 +4,7 @@ import {Pool,Client} from 'pg'
 // deve-se ao instalar o banco de dados colocar #abc123# no password
 
 const client = new Pool({
-  connectionString: 'postgresql://dbuser:secretpassword@database.server.com:3211/mydb',
+  connectionString: 'postgres://odltvcxcrvlktv:910a2e991a078df3456e3c0df561cef3691662c53c5b13283c13c330ad39c2de@ec2-52-3-79-87.compute-1.amazonaws.com:5432/d862rgr5db37ii',
   Host:'ec2-52-3-79-87.compute-1.amazonaws.com',
   Database:'d862rgr5db37ii',
   User:'odltvcxcrvlktv',
