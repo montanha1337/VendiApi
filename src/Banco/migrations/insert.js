@@ -37,7 +37,7 @@ async function vendedor(token,data) {
       const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
       return erro
     }else{
-      const avatar = await Banco.session(`UPDATE vendi."user" SET linkfoto=${caminho} WHERE id_user=${user};`)
+      const avatar = await Banco.session(`UPDATE vendi."user" SET linkfoto='${caminho}' WHERE id_user=${user};`)
       if(avatar.rowCount==1){
       return true
       }else{
