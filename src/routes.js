@@ -4,7 +4,7 @@ import User from './controller/Sessioncontroller'
 import Vendedor from './controller/Vendedorcontroller'
 import Anuncio from './controller/Anunciocontroller'
 import Home from './controller/HomeController'
-import Cliente from './controller/Clientecontroller'
+import Cliente from './controller/ClienteController'
 import Negociacao from './controller/NegociacaoController'
 
 const routes = new Router();
