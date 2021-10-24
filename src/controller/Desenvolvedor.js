@@ -18,8 +18,6 @@ const router = express.Router()
 // rota de teste banco de dados
 router.get('/testeConexaoBanco', async (req, res, ) => {
     const result = await Banco.session("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
-    
-    console.log(result)
     if(result.rows[0].count == 4){
       Funcao.atualizabanco()
       const conexao = await Funcao.verificaconexao(2)
@@ -34,10 +32,9 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
 })
  // rota de deletar de banco de dados.
  router.get('/deletaBanco',async(req,res)=>{
-  const banco= await Banco.session()
-  const result = await banco.query("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
+  const banco= await Banco.session("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
 
-  if(result.rows[0].count==7){
+  if(result.rows[0].count==4){
     const conexao =await Funcao.verificaconexao(3) 
     Database.deletaschema()      
     Delete.deleteArquivos("avatar")
