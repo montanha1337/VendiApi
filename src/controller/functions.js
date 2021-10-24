@@ -54,10 +54,9 @@ function atualizajwt(token){
 
 
 async function verificaconexao(mensagem){
-    const banco= await Chave.session()
-    const result = await banco.query("Select descricao from Vendi.Conexao con where con.id_conexao = $1",[mensagem])
+    const banco= await Chave.session("Select descricao from Vendi.Conexao con where con.id_conexao = $1",[mensagem])
 
-    const texto = result.rows[0]
+    const texto = banco.rows[0]
       return texto
     }
     //para enviar email
