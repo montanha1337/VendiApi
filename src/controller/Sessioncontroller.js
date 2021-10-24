@@ -9,8 +9,8 @@ import fs       from 'fs'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        fs.mkdir(`gs://vendi-527e3.appspot.com/fotosPerfil/`, (err) => {
-            cb(null, 'gs://vendi-527e3.appspot.com/fotosPerfil/');
+        fs.mkdir(`gs:/vendi-527e3.appspot.com/fotosPerfil/`, (err) => {
+            cb(null, 'gs:/vendi-527e3.appspot.com/fotosPerfil/');
         });
     },
     filename: function (req, file, cb) {
