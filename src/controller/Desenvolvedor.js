@@ -19,7 +19,7 @@ const router = express.Router()
 router.get('/testeConexaoBanco', async (req, res, ) => {
     const result = await Banco.session("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
     
-
+    console.log(result)
     if(result.rows[0].count==7){
       const texto= await Funcao.verificaconexao(1)
       res.json(texto)
