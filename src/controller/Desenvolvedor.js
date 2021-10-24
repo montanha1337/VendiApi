@@ -20,16 +20,17 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
     const result = await Banco.session("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
     
     console.log(result)
-    if(result.rows[0].count==7){
-      const texto= await Funcao.verificaconexao(1)
-      res.json(texto)
+    //if(result.rows[0].count==7){
+    //  const texto= await Funcao.verificaconexao(1)
+    //  res.json(texto)
  
-    }
-    else{
-      Funcao.atualizabanco()
-      const conexao = await Funcao.verificaconexao(2)
-      res.json(conexao)
-    }
+    //}
+    //else{
+    //  Funcao.atualizabanco()
+    //  const conexao = await Funcao.verificaconexao(2)
+    //  res.json(conexao)
+    //}
+    res.json(result)
 })
  // rota de deletar de banco de dados.
  router.get('/deletaBanco',async(req,res)=>{
