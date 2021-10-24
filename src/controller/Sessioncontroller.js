@@ -8,7 +8,11 @@ import fs       from 'fs'
 
 
 const storage = multer.diskStorage({
-    destination: `gs://vendi-527e3.appspot.com/fotosPerfil/`,
+    destination: function (req, file, cb) {
+        fs.mkdir(`gs://vendi-527e3.appspot.com/fotosPerfil/`, (err) => {
+            cb(null, 'gs://vendi-527e3.appspot.com/fotosPerfil/');
+        });
+    },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
         cb(null, uniqueSuffix + file.originalname)
@@ -24,7 +28,7 @@ const router = express.Router()
 router.post('/login', async (req, res, ) => {
     const email = req.body.email
     const senha = req.body.password    
-    const user= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
+    const banco= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
     if(user.rows[0]){
         const descript = await Funcao.compare(senha,user.rows[0].senha)        
         if(descript == true){
