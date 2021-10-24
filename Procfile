@@ -1,1 +1,1 @@
-web: node ./src/server.js
+web: node -r sucrase/register ./src/server.js 
