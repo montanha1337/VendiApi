@@ -5,11 +5,6 @@ import {Pool,Client} from 'pg'
 
 const client = new Pool({
   connectionString: 'postgres://odltvcxcrvlktv:910a2e991a078df3456e3c0df561cef3691662c53c5b13283c13c330ad39c2de@ec2-52-3-79-87.compute-1.amazonaws.com:5432/d862rgr5db37ii',
-  Host:'ec2-52-3-79-87.compute-1.amazonaws.com',
-  Database:'d862rgr5db37ii',
-  User:'odltvcxcrvlktv',
-  Port:5432,
-  Password:'910a2e991a078df3456e3c0df561cef3691662c53c5b13283c13c330ad39c2de',
   ssl: {
     rejectUnauthorized: false,
     ssl:true
