@@ -28,7 +28,7 @@ const router = express.Router()
 router.post('/login', async (req, res, ) => {
     const email = req.body.email
     const senha = req.body.password    
-    const banco= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= ${email}`)
+    const banco= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= "${email}"`)
     if(user.rows[0]){
         const descript = await Funcao.compare(senha,user.rows[0].senha)        
         if(descript == true){
@@ -49,7 +49,7 @@ router.post('/cadastro', async (req, res, ) => {
     const nome  = req.body.nome
     const email = req.body.email
     const senha = req.body.password    
-    const banco= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= ${email}`)
+    const banco= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= "${email}"`)
     if(user.rows[0]){
         const descript = await Funcao.compare(senha,user.rows[0].senha)        
         if(descript == true){
@@ -77,7 +77,7 @@ router.post('/cadastro', async (req, res, ) => {
 router.put('/enviarEmailDeRedefinicao', async (req, res, ) => {
     const nome = "Redefinição de senha";
     const email = req.body.email
-    const user = await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= ${email}`)
+    const user = await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= "${email}"`)
     if(user.rows[0]){
         const token= Funcao.gerajwtsenha(email)
         const url = ('http://localhost:8080/user/redefinirsenha/'+token)
@@ -95,10 +95,10 @@ router.post('/redefinirSenha/:token', async (req, res, ) => {
     const email = Funcao.verificatokensenha(token)
     const senhanova = req.body.novaSenha
     const password= await Funcao.cripto(senhanova)
-    const user = await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= ${email}`)
+    const user = await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= "${email}"`)
     if(user.rows[0]){
         await Banco.session(`UPDATE vendi.user SET senha=${password} WHERE email=${email};`)
-        const iduser = await Banco.session(`SELECT id_user FROM Vendi.user u where u.email= ${email} and u.senha= ${password};`)
+        const iduser = await Banco.session(`SELECT id_user FROM Vendi.user u where u.email= "${email}" and u.senha= "${password};"`)
         if(iduser.rows[0].id_user>0){
             const token= Funcao.gerajwt(iduser.rows[0].id_user)
             if(token== false){
