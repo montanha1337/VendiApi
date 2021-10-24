@@ -10,7 +10,7 @@ import Negociacao from './controller/NegociacaoController'
 const routes = new Router();
 //olhar o final da rota 
 
-router.get('/',async(req,res)=>{
+routes.get('/',async(req,res)=>{
     res.sendFile(__dirname+'/controller/tela/PaginaInicial.html')
     })
 routes.use('/desenvolvimento',Dev) //Rota com ferramentas para auxiliar o frontend e demais areas
