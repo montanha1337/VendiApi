@@ -13,11 +13,10 @@ const client = new Client({
 })
 
 //Funçao para estabelecer a conexão
-
+client.connect();
 
 
 async function session(query) {
-  client.connect();
   console.log('Session: '+query)
   var conexao=client.query(query);
   client.end()
