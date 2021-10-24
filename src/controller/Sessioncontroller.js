@@ -9,7 +9,7 @@ import fs       from 'fs'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        fs.mkdir('./uploads/avatar', (err) => {
+        fs.mkdir(`${process.cwd()}/uploads/avatar`, (err) => {
             cb(null, './uploads/avatar');
         });
     },
