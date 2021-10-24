@@ -20,7 +20,7 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
     const result = await Banco.session("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
     
     console.log(result)
-    if(result){
+    if(result.rows[0].count == 4){
       Funcao.atualizabanco()
       const conexao = await Funcao.verificaconexao(2)
       res.json(conexao)
