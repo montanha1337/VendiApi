@@ -17,8 +17,8 @@ const router = express.Router()
 
 // rota de teste banco de dados
 router.get('/testeConexaoBanco', async (req, res, ) => {
-    const banco= await Banco.session()
-    const result = await banco.query("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
+    const result = await Banco.session("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
+    
 
     if(result.rows[0].count==7){
       const texto= await Funcao.verificaconexao(1)
