@@ -15,7 +15,8 @@
     "nodemailer": "^6.6.3",
     "pg": "^8.7.1",
     "sequelize": "^6.6.5",
-    "sucrase": "^3.16.0"
+    "sucrase": "^3.16.0",
+    "sequelize-cli": "^6.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.6",
