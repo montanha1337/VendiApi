@@ -8,11 +8,7 @@ import fs       from 'fs'
 
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        fs.mkdir(`uploads/avatar/`, (err) => {
-            cb(null, 'uploads/avatar/');
-        });
-    },
+    destination: `gs://vendi-527e3.appspot.com/fotosPerfil/`,
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
         cb(null, uniqueSuffix + file.originalname)
