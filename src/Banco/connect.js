@@ -18,10 +18,8 @@ client.connect();
 
 async function session(query) {
   
-  var conexao=client.query(query, (err, res) => {
-    if (err) throw err;
-    client.end();
-  });
+  console.log('Session: '+query)
+  var conexao=client.query(query);
   return conexao
 }
 const secreto = 'Desenvolvemosfuturo'
