@@ -28,7 +28,7 @@ const router = express.Router()
 router.post('/login', async (req, res, ) => {
     const email = req.body.email
     const senha = req.body.password    
-    const banco= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= "${email}"`)
+    const banco= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
     if(user.rows[0]){
         const descript = await Funcao.compare(senha,user.rows[0].senha)        
         if(descript == true){
@@ -61,8 +61,8 @@ router.post('/cadastro', async (req, res, ) => {
         }
     }else{        
         const password= await Funcao.cripto(senha)
-        await Banco.session(`INSERT INTO Vendi.user(nome,email, senha)VALUES ("${nome}","${email}","${password}");`)
-        const iduser = await Banco.session(`SELECT id_user FROM Vendi.user u where u.email= "${email}" and u.senha= "${password}";`)
+        await Banco.session(`INSERT INTO Vendi.user(nome,email, senha)VALUES ('${nome}','${email}','${password}');`)
+        const iduser = await Banco.session(`SELECT id_user FROM Vendi.user u where u.email= '${email}' and u.senha= '${password}';`)
         if(iduser.rows[0].id_user>0){
             const token= Funcao.gerajwt(iduser.rows[0].id_user)
               res.status(200).json({token})
@@ -75,9 +75,9 @@ router.post('/cadastro', async (req, res, ) => {
 
 //Rota para envio de email para redefinição de senha
 router.put('/enviarEmailDeRedefinicao', async (req, res, ) => {
-    const nome = "Redefinição de senha";
+    const nome = 'Redefinição de senha';
     const email = req.body.email
-    const user = await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= "${email}"`)
+    const user = await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
     if(user.rows[0]){
         const token= Funcao.gerajwtsenha(email)
         const url = ('http://localhost:8080/user/redefinirsenha/'+token)
@@ -87,7 +87,7 @@ router.put('/enviarEmailDeRedefinicao', async (req, res, ) => {
 })
 //rota demostração tela redefinição senha.
 router.get('/redefinirsenha/:token',async(req,res)=>{
-res.sendFile(__dirname+"/tela/recuperarsenha.html")
+res.sendFile(__dirname+'/tela/recuperarsenha.html')
 })
 //Rota para redefinição de senha
 router.post('/redefinirSenha/:token', async (req, res, ) => {
@@ -95,10 +95,10 @@ router.post('/redefinirSenha/:token', async (req, res, ) => {
     const email = Funcao.verificatokensenha(token)
     const senhanova = req.body.novaSenha
     const password= await Funcao.cripto(senhanova)
-    const user = await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= "${email}"`)
+    const user = await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
     if(user.rows[0]){
         await Banco.session(`UPDATE vendi.user SET senha=${password} WHERE email=${email};`)
-        const iduser = await Banco.session(`SELECT id_user FROM Vendi.user u where u.email= "${email}" and u.senha= "${password};"`)
+        const iduser = await Banco.session(`SELECT id_user FROM Vendi.user u where u.email= '${email}' and u.senha= '${password};'`)
         if(iduser.rows[0].id_user>0){
             const token= Funcao.gerajwt(iduser.rows[0].id_user)
             if(token== false){
@@ -118,7 +118,7 @@ router.post('/avatar',parser.single('imagem'), async (req, res, ) => {
      
      const file = req.file
      var token = req.headers.authorization.replace(/^Bearer\s/, '')
-     await Cadastro.avatar(token,"https://vendiapi.herokuapp.com/user/uploads/"+file.filename)
+     await Cadastro.avatar(token,'https://vendiapi.herokuapp.com/user/uploads/'+file.filename)
      token = Funcao.atualizajwt(token) 
      if(token.status == false){
          console.log(token.mensagem)
