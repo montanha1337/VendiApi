@@ -5,8 +5,7 @@ import Funcao from '../../controller/functions'
 //Função com Script Para criar usuário
 //Campos:id_user,nome,email,senha
 async function criauser(){
-  const banco= await Banco.session()
-  await banco.query("CREATE TABLE Vendi.user (id_user SERIAL CONSTRAINT pk_id_user PRIMARY KEY,nome varchar(35) NOT NULL, email varchar(35) UNIQUE NOT NULL,senha varchar(200) NOT NULL, linkfoto varchar(200));",)
+  const banco= await Banco.session("CREATE TABLE Vendi.user (id_user SERIAL CONSTRAINT pk_id_user PRIMARY KEY,nome varchar(35) NOT NULL, email varchar(35) UNIQUE NOT NULL,senha varchar(200) NOT NULL, linkfoto varchar(200));",)
   const user= banco.query({text:'select * from Vendi.user'})
   if(user){
     return user
@@ -15,11 +14,7 @@ async function criauser(){
 //Função Com Script para criar a tabela conexão onde é armazenada as mensagens do backend
 //Campos:id_conexao,descricao
 async function criaconexao(){
-  const banco= await Banco.session()
-  await banco.query({
-      rowMode : 'array',
-      text: "CREATE SCHEMA Vendi AUTHORIZATION postgres; CREATE TABLE Vendi.conexao (id_conexao SERIAL CONSTRAINT pk_id_conexao PRIMARY KEY,descricao varchar(35) UNIQUE NOT NULL);INSERT INTO Vendi.conexao(descricao)VALUES ('Conexao realizada');INSERT INTO Vendi.conexao(descricao)VALUES ('Atualizacao feita com sucesso.');INSERT INTO Vendi.conexao(descricao)VALUES ('Banco apagado com sucesso.');INSERT INTO Vendi.conexao(descricao)VALUES ('Conseguiu acessar via email!!! :)');",
-    })
+  const banco= await Banco.session("CREATE SCHEMA Vendi AUTHORIZATION postgres; CREATE TABLE Vendi.conexao (id_conexao SERIAL CONSTRAINT pk_id_conexao PRIMARY KEY,descricao varchar(35) UNIQUE NOT NULL);INSERT INTO Vendi.conexao(descricao)VALUES ('Conexao realizada');INSERT INTO Vendi.conexao(descricao)VALUES ('Atualizacao feita com sucesso.');INSERT INTO Vendi.conexao(descricao)VALUES ('Banco apagado com sucesso.');INSERT INTO Vendi.conexao(descricao)VALUES ('Conseguiu acessar via email!!! :)');",)
     const conexao= await banco.query("select descricao from Vendi.conexao con where con.descricao= 'Atualizacao feita com sucesso.'")
     if(conexao){
       return conexao
@@ -28,8 +23,7 @@ async function criaconexao(){
 //Função Com Script para criar a tabela pessoa
 //Campos:id_pessoa,id_user,cpf
 async function criapessoa(){
-  const banco= await Banco.session()
-  await banco.query("CREATE TABLE Vendi.pessoa (id_pessoa SERIAL CONSTRAINT pk_id_pessoa PRIMARY KEY,id_user integer REFERENCES vendi.user (id_user), cpf varchar(15) UNIQUE NOT NULL);")
+  const banco= await Banco.session("CREATE TABLE Vendi.pessoa (id_pessoa SERIAL CONSTRAINT pk_id_pessoa PRIMARY KEY,id_user integer REFERENCES vendi.user (id_user), cpf varchar(15) UNIQUE NOT NULL);")
   const pessoa= banco.query({text:'select * from Vendi.pessoa'})
   if(pessoa){
     return pessoa
