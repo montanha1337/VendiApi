@@ -7,7 +7,7 @@ async function verificaUser(token) {
     const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
     return erro
   }else{
-    const user = await Banco.session(`select * from Vendi.user u where  u.id_user = ${duser}`)
+    const user = await Banco.session(`select * from Vendi.user u where  u.id_user = ${user}`)
     if(user.rows[0]){
       return user.rows[0].id_user
     }
