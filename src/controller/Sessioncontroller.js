@@ -28,7 +28,7 @@ const router = express.Router()
 router.post('/login', async (req, res, ) => {
     const email = req.body.email
     const senha = req.body.password    
-    const banco= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
+    const user= await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
     if(user.rows[0]){
         const descript = await Funcao.compare(senha,user.rows[0].senha)        
         if(descript == true){
@@ -80,14 +80,14 @@ router.put('/enviarEmailDeRedefinicao', async (req, res, ) => {
     const user = await Banco.session(`SELECT id_user, senha FROM Vendi.user u where u.email= '${email}'`)
     if(user.rows[0]){
         const token= Funcao.gerajwtsenha(email)
-        const url = ('http://localhost:8080/user/redefinirsenha/'+token)
+        const url = ('https://vendiapi.herokuapp.com/user/redefinirsenha/'+token)
         const recepcaoEmail=await Funcao.enviaremail(email, nome,url)   
         res.json({recepcaoEmail})
     }
 })
 //rota demostração tela redefinição senha.
 router.get('/redefinirsenha/:token',async(req,res)=>{
-res.sendFile(__dirname+'/tela/recuperarsenha.html')
+res.sendFile(__dirname+'/web/recuperarsenha.html')
 })
 //Rota para redefinição de senha
 router.post('/redefinirSenha/:token', async (req, res, ) => {
