@@ -87,7 +87,8 @@ router.put('/enviarEmailDeRedefinicao', async (req, res, ) => {
 })
 //rota demostração tela redefinição senha.
 router.get('/redefinirsenha/:token',async(req,res)=>{
-res.sendFile(__dirname+'/web/recuperarsenha.html')
+    const { token } = res.params
+res.sendFile('https://venddiapi.herokuapp.com/web/redefinirSenha/'+token)
 })
 //Rota para redefinição de senha
 router.post('/redefinirSenha/:token', async (req, res, ) => {
