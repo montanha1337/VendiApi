@@ -7,7 +7,7 @@ async function email(email, nome, mensagem){
         port: 465,
         secure: true, //SSL/TLS
         auth: {
-            user: 'matheusteixeira@gmail.com',
+            user: 'vendi.api@gmail.com',
             pass: 'Vendi123456'
         }
       });
