@@ -4,7 +4,7 @@ import {Pool,Client} from 'pg'
 // deve-se ao instalar o banco de dados colocar #abc123# no password
 
 const client = new Client({
-  connectionString: 'postgres://odltvcxcrvlktv:910a2e991a078df3456e3c0df561cef3691662c53c5b13283c13c330ad39c2de@ec2-52-3-79-87.compute-1.amazonaws.com:5432/d862rgr5db37ii',
+  connectionString: 'postgres://icirkndvgufckf:7633aa887df24ee847e024a4ec3439fc03d0b3ebeef316de97d5c059af711bfb@ec2-54-210-226-209.compute-1.amazonaws.com:5432/d9p9dq884n3h5t',
   ssl: {
     rejectUnauthorized: false,
     ssl:true
