@@ -11,7 +11,7 @@ const routes = new Router();
 //olhar o final da rota 
 
 routes.get('/',async(req,res)=>{
-    res.sendFile(__dirname+'/controller/tela/PaginaInicial.html')
+    res.sendFile(__dirname+'/controller/web/PaginaInicial.html')
     })
 routes.use('/desenvolvimento',Dev) //Rota com ferramentas para auxiliar o frontend e demais areas
 routes.use('/user',User)           //Rota para manipulação de usuario
