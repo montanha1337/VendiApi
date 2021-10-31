@@ -242,7 +242,7 @@ label {
         data = {
           novaSenha : form.querySelector('input[name="novaSenha"]').value
         }
-        let response = await fetch(`/user/redefinirSenha/${ token }`, {
+        let response = await fetch(`/web/redefinirSenha/${ token }`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -252,7 +252,7 @@ label {
 
         let text = await response;
         if(text.status==200){
-          alert('Senha Alterda com Sucesso, favor retornar a pagina inicial');
+          alert('Senha Alterada com Sucesso, favor retornar a pagina inicial');
         }else{
           alert('Erro ao atualizar a senha.');
         }
