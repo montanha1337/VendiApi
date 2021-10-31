@@ -13,6 +13,9 @@ const routes = new Router();
 //web
 routes.use('/web',Web)
 //Api
+routes.use('/', async (req, res) => {
+    res.sendFile(__dirname+'/src/web/PaginaErro.html')
+});
 routes.use('/desenvolvimento',Dev) //Rota com ferramentas para auxiliar o frontend e demais areas
 routes.use('/user',User)           //Rota para manipulação de usuario
 routes.use('/vendedor',Vendedor)           //Rota para manipulação de Vendedor
