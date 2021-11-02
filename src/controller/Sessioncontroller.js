@@ -4,22 +4,10 @@ import Funcao from './functions'
 import Banco from '../Banco/connect'
 import Cadastro from '../Banco/migrations/insert'
 import Consulta from '../Banco/migrations/consulta'
-import fs       from 'fs'
+import Firebase from '../Banco/connectFireBase'
 
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        fs.mkdir(`gs:/vendi-527e3.appspot.com/fotosPerfil/`, (err) => {
-            cb(null, 'gs:/vendi-527e3.appspot.com/fotosPerfil/');
-        });
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, uniqueSuffix + file.originalname)
-    }
-})
-
-  const parser = multer({ storage: storage })
+  const parser = multer({ storage: Firebase.storage })
 const router = express.Router()
 
 
@@ -119,7 +107,7 @@ router.post('/avatar',parser.single('imagem'), async (req, res, ) => {
      
      const file = req.file
      var token = req.headers.authorization.replace(/^Bearer\s/, '')
-     await Cadastro.avatar(token,'https://vendiapi.herokuapp.com/user/uploads/'+file.filename)
+     await Cadastro.avatar(token,'https://venddiapi.herokuapp.com/user/uploads/'+file.filename)
      token = Funcao.atualizajwt(token) 
      if(token.status == false){
          console.log(token.mensagem)
