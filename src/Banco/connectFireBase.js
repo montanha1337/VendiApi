@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import firebase from "firebase";
+import firebase from "firebase/app";
 
   // Set the configuration for your app
   // TODO: Replace with your app's config object
