@@ -113,6 +113,11 @@ li{
   height: 50px;
   left: 50px;
 }
+.icon{
+  float: right;
+  height: 50px;
+  left: 50px;
+}
 /*******************corpo ********************/
 
 .login,
