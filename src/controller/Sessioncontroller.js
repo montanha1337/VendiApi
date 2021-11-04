@@ -5,7 +5,7 @@ import Banco from '../Banco/connect'
 import Cadastro from '../Banco/migrations/insert'
 import Consulta from '../Banco/migrations/consulta'
 
-  const parser = multer({ storage: storage })
+  const parser = multer()
 const router = express.Router()
 
 
