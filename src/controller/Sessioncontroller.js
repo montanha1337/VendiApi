@@ -4,8 +4,6 @@ import Funcao from './functions'
 import Banco from '../Banco/connect'
 import Cadastro from '../Banco/migrations/insert'
 import Consulta from '../Banco/migrations/consulta'
-import Firebase from '../Banco/connectFireBase'
-
 
   const parser = multer({ storage: storage })
 const router = express.Router()
