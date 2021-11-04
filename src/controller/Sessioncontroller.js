@@ -7,7 +7,7 @@ import Consulta from '../Banco/migrations/consulta'
 import Firebase from '../Banco/connectFireBase'
 
 
-  const parser = multer({ storage: Firebase.storage })
+  const parser = multer({ storage: storage })
 const router = express.Router()
 
 
