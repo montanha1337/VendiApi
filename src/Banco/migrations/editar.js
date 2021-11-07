@@ -65,6 +65,21 @@ async function mediaClassificacao(vendedor,classificacao) {
     return erro
   }
 
+  async function mediaClassificacaoAnuncio(anuncio,classificacao) {
+    var mediaBanco
+      var result = await Banco.session(`select classificacao from Vendi.anuncio a where a.id_anuncio= ${anuncio}`)
+      if(result.rows[0]){
+        mediaBanco= parseFloat(result.rows[0].classificacao)
+        classificacao = parseFloat(classificacao)
+        classificacao= (mediaBanco + classificacao) / 2
+        await Banco.session(`update Vendi.anuncio set classificacao = ${classificacao} where id_anuncio=${anuncio}`)
+        classificacao = await Banco.session(`select classificacao from Vendi.anuncio where id_vendedor=${anuncio}`)
+        return classificacao.rows[0].classificacao
+      }
+      const erro = Funcoes.padraoErro("Nao foi possivel realizar classificar o anuncio")
+      return erro
+    }
 
 
-  module.exports = { updateTable, atualizaCliente, atualizaVendedor,mediaClassificacao}
+
+  module.exports = { updateTable, atualizaCliente, atualizaVendedor,mediaClassificacao, mediaClassificacaoAnuncio}

@@ -3,6 +3,7 @@ import Funcao from './functions'
 import Consulta from '../Banco/migrations/consulta'
 import Cadastro from '../Banco/migrations/insert'
 import Delete from '../Banco/migrations/deletar'
+import Editar from '../Banco/migrations/editar'
 import multer from 'multer'
 import fs       from 'fs'
 
@@ -27,6 +28,20 @@ router.get('/uploads/:id', async (req, res) => {
     var filepath = `${process.cwd()}/uploads/anuncio/${id}`
         res.status(200).sendFile(filepath)
 });
+
+router.put('/classificar/:id', async (req, res, ) => {
+    
+    const idAnuncio=req.params.id
+    var classificacao = req.body.classificacao
+        classificacao= await Editar.mediaClassificacaoAnuncio(idAnuncio,classificacao)
+        if(classificacao.status == false){
+            console.log(classificacao.mensagem)
+            res.status(401).json({classificacao:null})
+        }else{
+    res.status(200).json({classificacao})
+        }
+})
+
 router.post('/inserir', parser.single('imagem'), async (req, res, next) => {
 
     var anuncio = Object()
