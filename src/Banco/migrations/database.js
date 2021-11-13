@@ -124,7 +124,7 @@ async function verificaTabela(tabela){
         await verificaColuna(tabela, 'id_entrega','integer')
         await verificaColuna(tabela, 'id_anuncio','integer')
         await verificaColuna(tabela, 'id_pessoa','integer')
-        await verificaColuna(tabela, 'id_formadepagamento','integer')
+        await verificaColuna(tabela, 'id_pagamento','integer')
         await verificaColuna(tabela, 'valor','float')
         await verificaColuna(tabela, 'datanegociacao','date')
         return true
