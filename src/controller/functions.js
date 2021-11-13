@@ -115,23 +115,38 @@ async function verificaconexao(mensagem){
         const result = 'https://vendiapi.herokuapp.com/anuncio/uploads/'
         return result
     }
-    async function atualizabanco(){
-        const {rows} = await Atualiza.criaconexao()
-        await Atualiza.criauser()
-        await Atualiza.criapessoa()
-        await Atualiza.criatelefone()
-        await Atualiza.criaendereco()
-        await Atualiza.criavendedor()
-        await Atualiza.criacategoria()
-        await Atualiza.criaanuncio()
-        await Atualiza.criafoto()
-        await Atualiza.criaentrega()
-        await Atualiza.criaformadepagamento()
-        await Atualiza.crianegociacao()
+    async function criaBancoPadrao(){
+        await Atualiza.vendi()
+        await Atualiza.conexao()
+        await Atualiza.user()
+        await Atualiza.pessoa()
+        await Atualiza.telefone()
+        await Atualiza.endereco()
+        await Atualiza.vendedor()
+        await Atualiza.categoria()
+        await Atualiza.anuncio()
+        await Atualiza.foto()
+        await Atualiza.entrega()
+        await Atualiza.formadepagamento()
+        await Atualiza.negociacao()
         const password = await cripto("teste")
         await Atualiza.userTeste(password)
-        const texto = rows
-        return texto
+        return true
+    }
+    async function AtualizaBanco(){
+        await Atualiza.verificaTabela('conexao')
+        await Atualiza.verificaTabela('user')
+        await Atualiza.verificaTabela('pessoa')
+        await Atualiza.verificaTabela('telefone')
+        await Atualiza.verificaTabela('endereco')
+        await Atualiza.verificaTabela('vendedor')
+        await Atualiza.verificaTabela('categoria')
+        await Atualiza.verificaTabela('anuncio')
+        await Atualiza.verificaTabela('foto')
+        await Atualiza.verificaTabela('entrega')
+        await Atualiza.verificaTabela('formadepagamento')
+        await Atualiza.verificaTabela('negociacao')
+        return true
     }
     async function deletaFoto(caminho) {
         var teste = await unlink(caminho);
@@ -143,4 +158,4 @@ async function verificaconexao(mensagem){
         }
     }
 
-module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, atualizabanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, stringImagem, deletaFoto}
+module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, AtualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, stringImagem, deletaFoto}

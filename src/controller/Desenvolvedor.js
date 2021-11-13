@@ -18,18 +18,17 @@ const router = express.Router()
 // rota de teste banco de dados
 router.get('/testeConexaoBanco', async (req, res, ) => {
     const result = await Banco.session("select exists (select * from pg_catalog.pg_namespace where nspname = 'vendi');")
-    console.log(result.rows[0].exists)
     if(result.rows[0].exists=false){
-      Funcao.atualizabanco()
+      await Funcao.criaBancoPadrao()
       const conexao = await Funcao.verificaconexao(2)
       res.json(conexao)
- 
   }
     else{
+      await Funcao.atualizaBanco()
       const texto= await Funcao.verificaconexao(1)
       res.json(texto)
     }
-    //SELECT table_name, column_name FROM information_schema.columns WHERE table_schema = 'vendi';
+    
 })
  // rota de deletar de banco de dados.
  router.get('/deletaBanco',async(req,res)=>{
