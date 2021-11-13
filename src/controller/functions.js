@@ -133,7 +133,7 @@ async function verificaconexao(mensagem){
         await Atualiza.userTeste(password)
         return true
     }
-    async function AtualizaBanco(){
+    async function atualizaBanco(){
         await Atualiza.verificaTabela('conexao')
         await Atualiza.verificaTabela('user')
         await Atualiza.verificaTabela('pessoa')
@@ -158,4 +158,4 @@ async function verificaconexao(mensagem){
         }
     }
 
-module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, AtualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, stringImagem, deletaFoto}
+module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, atualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, stringImagem, deletaFoto}
