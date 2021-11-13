@@ -7,7 +7,7 @@ async function inserirCampo(tabela,campo,tipocampo){
 
 async function verificaColuna(tabela, coluna,tipocampo){
   const coluna1 = await Banco.session(`SELECT EXISTS( SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${tabela}' AND  COLUMN_NAME = '${coluna}');`)
-  if(coluna1.rows[0].exists = false){
+  if(coluna1.rows[0].exists == false){
       console.log("-----------------------------campo não existe no banco de dados")
       await inserirCampo(tabela,coluna,tipocampo)
       return true
