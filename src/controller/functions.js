@@ -134,6 +134,7 @@ async function verificaconexao(mensagem){
         return true
     }
     async function atualizaBanco(){
+        console.log("passou por atualiza banco")
         await Atualiza.verificaTabela('conexao')
         await Atualiza.verificaTabela('user')
         await Atualiza.verificaTabela('pessoa')
