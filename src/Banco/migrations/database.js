@@ -70,12 +70,12 @@ async function verificaTabela(tabela){
     }
   }else{
     switch(tabela){
-      case conexao:
+      case 'conexao':
         await verificaColuna(tabela, 'id_conexao','integer')
         await verificaColuna(tabela, 'descricao','varchar(200)')
         return true
 
-      case anuncio:
+      case 'anuncio':
         await verificaColuna(tabela, 'id_anuncio','integer')
         await verificaColuna(tabela, 'id_categoria','integer')
         await verificaColuna(tabela, 'id_vendedor','integer')
@@ -87,7 +87,7 @@ async function verificaTabela(tabela){
         await verificaColuna(tabela, 'localizacao','varchar(200)')
         return true
 
-      case endereco:
+      case 'endereco':
         await verificaColuna(tabela, 'id_endereco','integer')
         await verificaColuna(tabela, 'id_pessoa','integer')
         await verificaColuna(tabela, 'numero','integer')
@@ -96,7 +96,7 @@ async function verificaTabela(tabela){
         await verificaColuna(tabela, 'cidade','varchar(50)')
         return true
 
-      case entrega:
+      case 'entrega':
         await verificaColuna(tabela, 'id_entrega','integer')
         await verificaColuna(tabela, 'id_vendedor','integer')
         await verificaColuna(tabela, 'id_endereco','integer')
@@ -105,18 +105,18 @@ async function verificaTabela(tabela){
         await verificaColuna(tabela, 'codigorastreio','varchar(50)')
         return true
 
-      case formadepagamento:
+      case 'formadepagamento':
         await verificaColuna(tabela, 'id_formadepagamento','integer')
         await verificaColuna(tabela, 'descricao','varchar(20)')
         return true
 
-      case foto:
+      case 'foto':
         await verificaColuna(tabela, 'id_foto','integer')
         await verificaColuna(tabela, 'linkfoto','varchar(500)')
         await verificaColuna(tabela, 'id_anuncio','integer')
         return true
 
-      case negociacao:
+      case 'negociacao':
         await verificaColuna(tabela, 'id_negociacao','integer')
         await verificaColuna(tabela, 'id_entrega','integer')
         await verificaColuna(tabela, 'id_anuncio','integer')
@@ -126,33 +126,33 @@ async function verificaTabela(tabela){
         await verificaColuna(tabela, 'datanegociacao','date')
         return true
 
-      case pessoa:
+      case 'pessoa':
         await verificaColuna(tabela, 'id_pessoa','integer')
         await verificaColuna(tabela, 'id_user','integer')
         await verificaColuna(tabela, 'cpf','varchar(11)')
         return true
 
-      case telefone:
+      case 'telefone':
         await verificaColuna(tabela, 'id_telefone','integer')
         await verificaColuna(tabela, 'id_pessoa','integer')
         await verificaColuna(tabela, 'telefone','varchar(20)')
         await verificaColuna(tabela, 'whatsapp','boolean')
         return true
 
-      case user:
+      case 'user':
         await verificaColuna(tabela, 'id_user','integer')
         await verificaColuna(tabela, 'nome','varchar(35)')
         await verificaColuna(tabela, 'email','varchar(35)')
         await verificaColuna(tabela, 'senha','varchar(200)')
         return true
 
-      case vendedor:
+      case 'vendedor':
         await verificaColuna(tabela, 'id_vendedor','integer')
         await verificaColuna(tabela, 'id_pessoa','integer')
         await verificaColuna(tabela, 'classificacao','integer')
         return true
 
-      case categoria:
+      case 'categoria':
         await verificaColuna(tabela, 'id_categoria','integer')
         await verificaColuna(tabela, 'descricao','varchar(35)')
         return true
