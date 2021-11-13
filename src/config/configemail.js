@@ -1,7 +1,4 @@
 import nodemailer from "nodemailer"
-import http from 'http'
-import querystring from 'querystring'
- var MailParser = require("mailparser").MailParser; // https://github.com/andris9/mailparser
  
 async function email(email, nome, mensagem){
       // create reusable transporter object using the default SMTP transport
