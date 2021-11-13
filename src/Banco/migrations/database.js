@@ -76,6 +76,7 @@ async function verificaTabela(tabela){
         return true
 
       case 'anuncio':
+        await verificaColuna(tabela, 'localizacao','varchar(500)')
         await verificaColuna(tabela, 'id_anuncio','integer')
         await verificaColuna(tabela, 'id_categoria','integer')
         await verificaColuna(tabela, 'id_vendedor','integer')
@@ -84,7 +85,7 @@ async function verificaTabela(tabela){
         await verificaColuna(tabela, 'valor','float')
         await verificaColuna(tabela, 'dataanuncio','date')
         await verificaColuna(tabela, 'classificacao','integer')
-        await verificaColuna(tabela, 'localizacao','varchar(200)')
+        
         return true
 
       case 'endereco':
@@ -230,7 +231,7 @@ async function categoria(){
 //Função Com Script para criar a tabela anuncio
 //Campos:
 async function anuncio(){
-  await Banco.session("CREATE TABLE Vendi.anuncio (id_anuncio SERIAL CONSTRAINT pk_id_anuncio PRIMARY KEY,id_vendedor integer REFERENCES vendi.vendedor (id_vendedor),id_categoria integer REFERENCES vendi.categoria (id_categoria),titulo varchar(150) not null, descricao varchar(500) not null, valor numeric not null, dataAnuncio date not null,classificacao integer);")
+  await Banco.session("CREATE TABLE Vendi.anuncio (id_anuncio SERIAL CONSTRAINT pk_id_anuncio PRIMARY KEY,id_vendedor integer REFERENCES vendi.vendedor (id_vendedor),id_categoria integer REFERENCES vendi.categoria (id_categoria),titulo varchar(150) not null, descricao varchar(500) not null, valor numeric not null, dataAnuncio date not null,classificacao integer,localizacao varchar(500) not null);")
   const anuncio= Banco.session('select * from Vendi.anuncio')
   if(anuncio){
     return anuncio
