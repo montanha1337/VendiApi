@@ -19,7 +19,7 @@ async function verificaColuna(tabela, coluna,tipocampo){
 async function verificaTabela(tabela){
   const tabela1 = await Banco.session(`SELECT EXISTS ( SELECT FROM information_schema.tables WHERE  table_schema = 'vendi' AND    table_name   = '${tabela}');`)
   
-  if(tabela1.rows[0].exists = false){
+  if(tabela1.rows[0].exists == false){
     switch(tabela){
       case 'conexao':
         await conexao()
