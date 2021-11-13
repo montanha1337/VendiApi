@@ -18,7 +18,7 @@ const router = express.Router()
 // rota de teste banco de dados
 router.get('/testeConexaoBanco', async (req, res, ) => {
     const result = await Banco.session("select exists (select * from pg_catalog.pg_namespace where nspname = 'vendi');")
-    console.log(result.rows)
+    console.log(result.rows[0].exists)
     if(result.rows[0].exists=false){
       Funcao.atualizabanco()
       const conexao = await Funcao.verificaconexao(2)
