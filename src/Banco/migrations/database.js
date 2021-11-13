@@ -2,7 +2,7 @@ import Banco from '../connect'
 
 async function inserirCampo(tabela,campo,tipocampo){
   tabela = 'vendi.'+tabela
-  await Banco.session(`ALTER TABLE vendi.${tabela} ADD COLUMN  ${campo} ${tipocampo};`)
+  await Banco.session(`ALTER TABLE ${tabela} ADD COLUMN  ${campo} ${tipocampo};`)
   return true
 }
 
