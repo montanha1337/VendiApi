@@ -104,7 +104,7 @@ async function verificaTabela(tabela){
         await verificaColuna(tabela, 'id_vendedor','integer')
         await verificaColuna(tabela, 'id_endereco','integer')
         await verificaColuna(tabela, 'tipoentrega','integer')
-        await verificaColuna(tabela, 'ddataconfirmacaoentrega','date')
+        await verificaColuna(tabela, 'dataconfirmacaoentrega','date')
         await verificaColuna(tabela, 'codigorastreio','varchar(50)')
         return true
 
