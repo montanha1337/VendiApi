@@ -6,6 +6,8 @@ import Delete from '../Banco/migrations/deletar'
 import Editar from '../Banco/migrations/editar'
 
 
+const router = express.Router()
+
 router.get('/uploads/:id', async (req, res) => {
     var { id } = req.params
     var filepath = `${process.cwd()}/uploads/anuncio/${id}`
