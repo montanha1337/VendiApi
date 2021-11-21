@@ -21,9 +21,8 @@ async function vendedor(token) {
                 var anuncio = await Banco.session(`select linkfoto, a.id_anuncio, f.id_foto from Vendi.anuncio a left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_vendedor = ${vendedor.id_vendedor}`)
                 for (var i = 0; i < n.rows[0].vx; i++) {
                     await Banco.session(`select id_pessoa from Vendi.vendedor where id_vendedor = ${vendedor.id_vendedor}`) 
-                    var foto = await Banco.session(`select linkfoto from Vendi.anuncio a left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where f.id_foto = ${anuncio.rows[i].id_foto}`)
+                    await Banco.session(`select linkfoto from Vendi.anuncio a left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where f.id_foto = ${anuncio.rows[i].id_foto}`)
                     await Banco.session(`delete from Vendi.foto where id_anuncio = ${anuncio.rows[i].id_anuncio}`)
-                    await Funcoes.deletaFoto(`${process.cwd()}/uploads/anuncio/${foto.rows[0].linkfoto.substring(38)}`)
                 }
                 await Banco.session(`delete from Vendi.anuncio where id_vendedor = ${vendedor.id_vendedor}`)
                 await Banco.session(`delete from Vendi.vendedor where id_vendedor = ${vendedor.id_vendedor}`)
