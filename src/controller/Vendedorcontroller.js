@@ -35,7 +35,7 @@ router.post('/Inserir', async (req, res, ) => {
             res.status(401).json({token:null,tokenVenda:null,result:null})
         }else{
             result = await Cadastro.vendedor(token,data)
-            if(result.status== false){
+            if(result.status){
                 console.log(result)
                 if(result.id_vendedor== null){
                     console.log("Erro: não é vendedor")
