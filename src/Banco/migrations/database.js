@@ -89,7 +89,7 @@ async function verificaTabela(tabela){
         await verificaColuna(tabela, 'titulo','varchar(150)')
         await verificaColuna(tabela, 'descricao','varchar(500)')
         await verificaColuna(tabela, 'valor','float')
-        await verificaColuna(tabela, 'dataanuncio','date')
+        await verificaColuna(tabela, 'dataanuncio','varchar(10)')
         await verificaColuna(tabela, 'classificacao','integer')
         await verificaColuna(tabela, 'latitude','varchar(35)')
         await verificaColuna(tabela, 'longitude','varchar(200)')
