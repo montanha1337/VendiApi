@@ -18,11 +18,7 @@ async function vendedor(token,data) {
         await Banco.session(`INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES (${pessoa.rows[0].id_pessoa},${data["rua"]},${data["bairro"]},${data["cidade"]},${data["numero"]},${data["cep"]});`)
         await Banco.session(`INSERT INTO vendi.vendedor(id_pessoa,classificacao) VALUES (${pessoa.rows[0].id_pessoa},${data["classificacao"]});`)
         pessoa= await Consulta.vendedor(token)
-        if(pessoa.status== false){
           return pessoa
-        }else{
-          return pessoa
-        }
         }else{
           return pessoa
         }
