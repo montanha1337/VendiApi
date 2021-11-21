@@ -1,5 +1,5 @@
 import Banco from '../connect'
-import Ibge from './dadosigbe.sql'
+import DadosIbge from './dadosibge'
 
 async function inserirCampo(tabela,campo,tipocampo){
   tabela = 'vendi.'+tabela
@@ -291,6 +291,7 @@ async function ibge(){
   await Banco.session("CREATE TABLE [IF NOT EXISTS] Vendi.coodmunicipio (id_municipio SERIAL CONSTRAINT pk_id_municipio PRIMARY KEY,codigoibge integer NOT NULL, latitude varchar(35) UNIQUE NOT NULL,longitude varchar(200) NOT NULL, estado varchar(2), muncipio varchar(100)",)
   const ibge= await verificaTabela('coodmunicipio')
   if(ibge==true){
+    await atualizaDadosIBGE()
     return ibge
   }
 }
@@ -298,9 +299,10 @@ async function ibge(){
 async function atualizaDadosIBGE(){
   const dados= await verificaTabela('coodmunicipio')
   if(dados== true){
-    const arquivo = toString(Ibge)
-    await Banco.session(arquivo)
-    return true
+    const arquivo = await DadosIbge.dadosIbge()
+    if(arquivo == true){
+      return true
+    }
   }
 }
 
