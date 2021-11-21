@@ -39,7 +39,8 @@ async function vendedor(token) {
       if(vendedor.result.rows[0]){
         vendedor.status = true
         vendedor.result = vendedor.result.rows[0]
-        return vendedor      }
+        return vendedor      
+      }
       const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
       return erro
     }
@@ -65,19 +66,31 @@ async function vendedor(token) {
       const erro = Funcoes.padraoErro("nao foi possivel identificar o usuario da requisição")
       return erro
     }else{
-      const pessoa = await Banco.session(`select p.cpf from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where u.id_user = ${user}`)
+      var pessoa = await Banco.session(`select p.cpf from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where u.id_user = ${user}`)
       if(pessoa.rows[0].cpf==null){
-        json.status = true
-        json.mensagem = 'CPF não encontrado'
-        return json
-      }else{
-        if(pessoa.rows[0].cpf == cpf){
-          const erro = Funcoes.padraoErro('Cpf já existe.')  
+        pessoa = Banco.session(`select p.cpf from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where p.cpf = ${cpf} `)
+        if(pessoa.rows[0].cpf==null){
+          const erro = Funcoes.padraoErro('Cpf não encontrado.')  
           return erro
         }else{
-          json.status = true
-          json.mensagem = 'CPF não pertence ao usuario.'
-          return json
+          const erro = Funcoes.padraoErro('Cpf já existe para outro usuário.')  
+          erro.status = true
+          return erro
+        }
+      }else{
+        if(pessoa.rows[0].cpf == cpf){
+          const erro = Funcoes.padraoErro('Cpf já existe para o usuário.')  
+          return erro
+        }else{
+          pessoa = Banco.session(`select p.cpf from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where p.cpf = ${cpf} `)
+          if(pessoa.rows[0].cpf==null){
+            const erro = Funcoes.padraoErro('Cpf já existe para o usuário.')  
+            erro.status = true
+            return erro
+          }else{
+            const erro = Funcoes.padraoErro('Cpf já existe para outro usuário.')  
+            return erro
+          }
       }
     }
   }
