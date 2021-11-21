@@ -37,7 +37,7 @@ router.get('/anuncio/:categoria/:pagina', async (req, res, ) => {
     const { pagina } = req.params
     const latitude = req.body.latitude
     const longitude = req.body.longitude
-    const anuncio = await Consulta.anuncio(categoria,pagina)
+    const anuncio = await Consulta.anuncio(categoria,pagina,latitude,longitude)
     if(anuncio.status == false){
         console.log(anuncio.mensagem)
         res.status(401).json({anuncio:[]})
