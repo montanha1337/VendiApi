@@ -20,7 +20,7 @@ async function vendedor(token,data) {
         await Banco.session(`INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= ${user}),${data["cpf"]});`)
         pessoa = await Banco.session(`select id_pessoa from Vendi.pessoa p where p.id_user= ${user}`)
         await Banco.session(`INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES (${pessoa.rows[0].id_pessoa},${data.telefone},${data["whatsapp"]});`)
-        await Banco.session(`INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES (${pessoa.rows[0].id_pessoa},${data["rua"]},${data["bairro"]},${data["cidade"]},${data["numero"]},${data["cep"]});`)
+        await Banco.session(`INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES (${pessoa.rows[0].id_pessoa},'${data["rua"]}','${data["bairro"]}','${data["cidade"]}','${data["numero"]}','${data["cep"]}');`)
         await Banco.session(`INSERT INTO vendi.vendedor(id_pessoa,classificacao) VALUES (${pessoa.rows[0].id_pessoa},${data["classificacao"]});`)
         pessoa= await Consulta.vendedor(token)
         if(pessoa.status== false){
