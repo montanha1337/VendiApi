@@ -37,6 +37,8 @@ router.post('/inserir', async (req, res, next) => {
     anuncio.valor = req.body.valorVenda
     anuncio.classificacao = req.body.classificacao
     anuncio.data = new Date();
+    anuncio.latitude = req.body.latitude
+    anuncio.longitude = req.body.longitude
     const token1 = req.headers.authorization.replace(/^Bearer\s/, '');
     const token = Funcao.atualizajwt(token1)
     if (token.status == false) {
@@ -56,7 +58,9 @@ router.post('/inserir', async (req, res, next) => {
 router.get('/buscar/:id', async (req, res,) => {
 
     const { id } = req.params
-    const anuncio = await Consulta.anuncioLista(id)
+    const latitude = req.body.latitude
+    const longitude = req.body.longitude
+    const anuncio = await Consulta.anuncioLista(id,latitude,longitude)
     if (anuncio.status == false) {
         console.log(anuncio.mensagem)
         res.status(200).json({ anuncio: [] })
