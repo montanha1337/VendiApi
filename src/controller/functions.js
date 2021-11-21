@@ -176,7 +176,7 @@ async function verificaconexao(mensagem){
         y -= (beta * cos * Math.sin( long2 ));    
         z -= (beta * (1 - e) * Math.sin( lat2 ));       
         var resultado =(Math.sqrt( (x*x) + (y*y) + (z*z) )/1000); 
-        console.log(resultado)
+        console.log("Resultado_______"+resultado)
         return resultado
       }
 
