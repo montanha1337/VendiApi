@@ -8,7 +8,6 @@ const router = express.Router()
 
 router.get('/whatsapp/:id', async (req, res) => {
     const { id } = req.params
-    var text = req.body.mensagem
     
     var whatsapp = await Consulta.anuncioNegocicao(id)
     text= text.replace(" ", "%20")
