@@ -185,7 +185,7 @@ async function vendi(){
 //Função com Script Para criar usuário
 //Campos:id_user,nome,email,senha
 async function user(){
-  await Banco.session("CREATE TABLE [IF NOT EXISTS] Vendi.user (id_user SERIAL CONSTRAINT pk_id_user PRIMARY KEY,nome varchar(35) NOT NULL, email varchar(35) UNIQUE NOT NULL,senha varchar(200) NOT NULL, linkfoto varchar(200));",)
+  await Banco.session("CREATE TABLE Vendi.user (id_user SERIAL CONSTRAINT pk_id_user PRIMARY KEY,nome varchar(35) NOT NULL, email varchar(35) UNIQUE NOT NULL,senha varchar(200) NOT NULL, linkfoto varchar(200));",)
   const user= Banco.session('select * from Vendi.user')
   if(user){
     return user
@@ -288,7 +288,7 @@ async function userTeste(password) {
 }
 
 async function ibge(){
-  await Banco.session("CREATE TABLE [IF NOT EXISTS] Vendi.coodmunicipio (id_municipio SERIAL CONSTRAINT pk_id_municipio PRIMARY KEY,codigoibge integer NOT NULL, latitude varchar(35) UNIQUE NOT NULL,longitude varchar(200) NOT NULL, estado varchar(2), muncipio varchar(100)",)
+  await Banco.session("CREATE TABLE Vendi.coodmunicipio (id_municipio SERIAL CONSTRAINT pk_id_municipio PRIMARY KEY,codigoibge integer NOT NULL, latitude varchar(35) UNIQUE NOT NULL,longitude varchar(200) NOT NULL, estado varchar(2), muncipio varchar(100)",)
   const ibge= await verificaTabela('coodmunicipio')
   if(ibge==true){
     await atualizaDadosIBGE()
