@@ -145,7 +145,6 @@ async function verificaconexao(mensagem){
         await Atualiza.verificaTabela('formadepagamento')
         await Atualiza.verificaTabela('negociacao')
         await Atualiza.verificaTabela('coodmunicipio')
-        await Atualiza.atualizaDadosIBGE()
         return true
     }
 

@@ -288,7 +288,7 @@ async function userTeste(password) {
 }
 
 async function ibge(){
-  await Banco.session("CREATE TABLE Vendi.coodmunicipio (id_coodmunicipio SERIAL CONSTRAINT pk_id_coodmunicipio PRIMARY KEY,codigoibge integer, latitude varchar(35),longitude varchar(200), estado varchar(2), municipio varchar(100))",)
+  await Banco.session("CREATE TABLE Vendi.coodmunicipio (id_coodmunicipio SERIAL CONSTRAINT pk_id_coodmunicipio PRIMARY KEY,codigoibge integer  UNIQUE NOT NULL, latitude varchar(35),longitude varchar(200), estado varchar(2), municipio varchar(100))",)
   const ibge= await verificaTabela('coodmunicipio')
   if(ibge==true){
     await atualizaDadosIBGE()
@@ -324,4 +324,4 @@ async function atualizaDadosIBGE(){
 
 
 
-module.exports = {verificaTabela, vendi, user, userTeste, conexao, deletaschema, pessoa, vendedor, categoria, anuncio, foto, telefone, endereco, entrega, formadepagamento, negociacao, ibge,atualizaDadosIBGE}
+module.exports = {verificaTabela, vendi, user, userTeste, conexao, deletaschema, pessoa, vendedor, categoria, anuncio, foto, telefone, endereco, entrega, formadepagamento, negociacao, ibge}
