@@ -211,10 +211,10 @@ async function fotoAnuncio(linkFoto) {
 async function anuncioNegocicao(idAnuncio) {
   var anuncio = await Banco.session(`select a.titulo, t.telefone from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor = a.id_vendedor left outer join Vendi.telefone t on t.id_pessoa = v.id_pessoa where a.id_anuncio = ${idAnuncio} and t.whatsapp = 'true'`)
   if(anuncio.rows[0]){
-    anuncio.descricao = anuncio.rows[0].titulo.replace(' ', '%20')
-    anuncio.telefone = anuncio.rows[0].telefone
-    console.log(anuncio)
-    return anuncio
+    var anuncios.descricao = anuncio.rows[0].titulo.replace(' ', '%20')
+    anuncios.telefone = anuncio.rows[0].telefone
+    console.log(anuncios)
+    return anuncios
   }
   const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
   return erro
