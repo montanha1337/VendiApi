@@ -10,7 +10,6 @@ router.get('/whatsapp/:id', async (req, res) => {
     const { id } = req.params
     
     var whatsapp = await Consulta.anuncioNegocicao(id)
-    text= text.replace(" ", "%20")
     res.redirect(`https://wa.me/55${whatsapp.telefone}?text=${whatsapp.descricao}`)
 });
 
