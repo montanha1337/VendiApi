@@ -213,6 +213,7 @@ async function anuncioNegocicao(idAnuncio) {
   if(anuncio.rows[0]){
     anuncio.descricao = anuncio.rows[0].titulo.replace(' ', '%20')
     anuncio.telefone = anuncio.rows[0].telefone
+    console.log(anuncio)
     return anuncio
   }
   const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
