@@ -47,7 +47,7 @@ async function vendedor(token,data) {
     }
   }
   async function imagemAnuncio(anuncio,caminho) {
-      const avatar = await Banco.session(`INSERT INTO vendi.foto(id_anuncio, linkfoto) VALUES ( ${anuncio}, ${caminho});`)
+      const avatar = await Banco.session(`INSERT INTO vendi.foto(id_anuncio, linkfoto) VALUES ( ${anuncio}, '${caminho}');`)
       if(avatar.rowCount==1){
       return true
       }else{
