@@ -80,6 +80,7 @@ router.post('/editar', async (req, res, ) => {
     data.cidade=req.body.cidade
     data.numero=req.body.numero
     data.cep=req.body.cep
+    console.log(data)
     const token1=req.headers.authorization.replace(/^Bearer\s/, '');
     var token = Funcao.atualizajwt(token1)
     const  vendedor = await Consulta.verificaVendedor(token)
