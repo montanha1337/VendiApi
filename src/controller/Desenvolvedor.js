@@ -38,6 +38,11 @@ router.get('/testegeolocalizacao', async (req, res, ) => {
   const result = await Consulta.analizaLatitude(latitude, longitude)
   res.json(result)
 })
+
+router.get('/rotasparaimportacao', async (req, res, ) => {
+  res.redirect('https://drive.google.com/drive/folders/1Dn4XIr-qcVQpSqlT6aqseXfNscRXqllu?usp=sharing')
+})
+
  // rota de deletar de banco de dados.
  router.get('/deletaBanco',async(req,res)=>{
   const banco= await Banco.session("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
