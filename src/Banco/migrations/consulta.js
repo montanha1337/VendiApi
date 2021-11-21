@@ -123,7 +123,7 @@ async function vendedor(token) {
     var dados = Object()
     dados.latitude=latitude[0]+latitude[1]+latitude[2]+latitude[3]+latitude[4]
     dados.longitude=longitude[0]+longitude[1]+longitude[2]+longitude[3]+longitude[4]
-      const anuncio = await Banco.session(`select a.id_anuncio,u.nome as vendedor, e.cidade,a.id_categoria, a.titulo, a.descricao, cast( a.valor as numeric) as valor, a.dataanuncio, a.classificacao, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_categoria = ${categoria} and a.latitude like '${latitude}%' and a.longitude like ' ${longitude}%' LIMIT 10 OFFSET(${pagina} - 1) * 10`)
+      const anuncio = await Banco.session(`select a.id_anuncio,u.nome as vendedor, e.cidade,a.id_categoria, a.titulo, a.descricao, cast( a.valor as numeric) as valor, a.dataanuncio, a.classificacao, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_categoria = ${categoria} and a.latitude like '${dados.latitude}%' and a.longitude like ' ${dados.longitude}%' LIMIT 10 OFFSET(${pagina} - 1) * 10`)
 
       if(anuncio.rows[0]){
           return anuncio.rows
@@ -133,6 +133,7 @@ async function vendedor(token) {
     
   }
     async function anuncioLista(idAnuncio, latitude, longitude) {
+      
       const anuncio = await Banco.session(`select a.id_anuncio, u.nome as vendedor, e.cidade, a.id_categoria, a.titulo, a.descricao, a.valor, a.dataanuncio, f.linkfoto, a.latitude, a.longitude from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_anuncio = ${idAnuncio}`)
       if(anuncio.rows[0]){
         var resultAnuncio = Object()
