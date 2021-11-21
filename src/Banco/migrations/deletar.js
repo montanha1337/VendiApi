@@ -1,7 +1,6 @@
 import Banco from '../connect'
 import Funcoes from '../../controller/functions'
 import Consulta from './consulta'
-import fs       from 'fs'
 
 async function vendedor(token) {
     const user     = await Consulta.verificaUser(token)
@@ -76,25 +75,10 @@ async function anuncio(id,token) {
   }else{
   var foto = await Banco.session(`select linkfoto from Vendi.foto where id_anuncio =${id}`)
   var anuncio = await Banco.session(`delete from Vendi.foto where id_anuncio = ${id}`)
-  foto = await Funcoes.deletaFoto(`${process.cwd()}/uploads/anuncio/${foto.rows[0].linkfoto.substring(38)}`)
   anuncio = await Banco.session(`delete from Vendi.anuncio where id_anuncio = ${id}`)
   return true
   }
 }
-function deleteArquivos(caminho) {
-
-    fs.readdir(`${process.cwd()}/uploads/${caminho}/`, (err, files) => {
-        if (err)
-          console.log(err);
-        else {
-          console.log(`\nCurrent directory ${caminho} filenames deleted:`);
-          files.forEach(file => {
-              console.log(file)
-            Funcoes.deletaFoto(`${process.cwd()}/uploads/${caminho}/${file}`)
-          })
-        }
-      })
-}
 
 
-module.exports = { vendedor, user, cliente, anuncio, deleteArquivos}
+module.exports = { vendedor, user, cliente, anuncio}

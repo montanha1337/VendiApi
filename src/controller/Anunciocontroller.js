@@ -4,24 +4,7 @@ import Consulta from '../Banco/migrations/consulta'
 import Cadastro from '../Banco/migrations/insert'
 import Delete from '../Banco/migrations/deletar'
 import Editar from '../Banco/migrations/editar'
-import multer from 'multer'
-import fs       from 'fs'
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        fs.mkdir('./uploads/anuncio', (err) => {
-            cb(null, './uploads/anuncio');
-        });
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, uniqueSuffix + file.originalname)
-    }
-})
-
-
-const parser = multer({ storage: storage })
-const router = express.Router()
 
 router.get('/uploads/:id', async (req, res) => {
     var { id } = req.params
@@ -42,10 +25,10 @@ router.put('/classificar/:id', async (req, res, ) => {
         }
 })
 
-router.post('/inserir', parser.single('imagem'), async (req, res, next) => {
+router.post('/inserir', async (req, res, next) => {
 
     var anuncio = Object()
-    anuncio.file = req.file
+    anuncio.file = req.body.imagem
     anuncio.categoria = req.body.categoria
     anuncio.titulo = req.body.titulo
     anuncio.descricao = req.body.descricao

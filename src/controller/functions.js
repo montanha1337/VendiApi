@@ -111,10 +111,7 @@ async function verificaconexao(mensagem){
         }
         return true;
     }
-    function stringImagem() {
-        const result = 'https://vendiapi.herokuapp.com/anuncio/uploads/'
-        return result
-    }
+
     async function criaBancoPadrao(){
         await Atualiza.vendi()
         await Atualiza.conexao()
@@ -129,12 +126,12 @@ async function verificaconexao(mensagem){
         await Atualiza.entrega()
         await Atualiza.formadepagamento()
         await Atualiza.negociacao()
+        await Atualiza.ibge()
         const password = await cripto("teste")
         await Atualiza.userTeste(password)
         return true
     }
     async function atualizaBanco(){
-        console.log("passou por atualiza banco")
         await Atualiza.verificaTabela('conexao')
         await Atualiza.verificaTabela('user')
         await Atualiza.verificaTabela('pessoa')
@@ -147,16 +144,10 @@ async function verificaconexao(mensagem){
         await Atualiza.verificaTabela('entrega')
         await Atualiza.verificaTabela('formadepagamento')
         await Atualiza.verificaTabela('negociacao')
+        await Atualiza.verificaTabela('coodmunicipio')
+        await Atualiza.atualizaDadosIBGE()
         return true
     }
-    async function deletaFoto(caminho) {
-        var teste = await unlink(caminho);
-        if(teste){
-            return teste
-        }else{
-            const erro = padraoErro(`Erro ao deletar o caminho ${caminho}`)
-            return erro
-        }
-    }
 
-module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, atualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf, stringImagem, deletaFoto}
+
+module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, atualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf}

@@ -1,4 +1,5 @@
 import Banco from '../connect'
+import Ibge from './dadosigbe.sql'
 
 async function inserirCampo(tabela,campo,tipocampo){
   tabela = 'vendi.'+tabela
@@ -69,6 +70,10 @@ async function verificaTabela(tabela){
       case 'categoria':
         await categoria()
         return true
+
+      case 'coodmunicipio':
+        await ibge()
+        return true
     }
   }else{
     switch(tabela){
@@ -78,7 +83,6 @@ async function verificaTabela(tabela){
         return true
 
       case 'anuncio':
-        await verificaColuna(tabela, 'localizacao','varchar(500)')
         await verificaColuna(tabela, 'id_anuncio','integer')
         await verificaColuna(tabela, 'id_categoria','integer')
         await verificaColuna(tabela, 'id_vendedor','integer')
@@ -87,6 +91,8 @@ async function verificaTabela(tabela){
         await verificaColuna(tabela, 'valor','float')
         await verificaColuna(tabela, 'dataanuncio','date')
         await verificaColuna(tabela, 'classificacao','integer')
+        await verificaColuna(tabela, 'latitude','varchar(35)')
+        await verificaColuna(tabela, 'longitude','varchar(200)')
         
         return true
 
@@ -158,6 +164,15 @@ async function verificaTabela(tabela){
       case 'categoria':
         await verificaColuna(tabela, 'id_categoria','integer')
         await verificaColuna(tabela, 'descricao','varchar(35)')
+        return true
+
+        case 'coodmunicipio':
+        await verificaColuna(tabela, 'id_municipio','integer')
+        await verificaColuna(tabela, 'codigoibge','integer')
+        await verificaColuna(tabela, 'latitude','varchar(35)')
+        await verificaColuna(tabela, 'longitude','varchar(200)')
+        await verificaColuna(tabela, 'estado','varchar(2)')
+        await verificaColuna(tabela, 'municipio','varchar(100)')
         return true
     }
   }
@@ -272,6 +287,23 @@ async function userTeste(password) {
   return true
 }
 
+async function ibge(){
+  await Banco.session("CREATE TABLE [IF NOT EXISTS] Vendi.coodmunicipio (id_municipio SERIAL CONSTRAINT pk_id_municipio PRIMARY KEY,codigoibge integer NOT NULL, latitude varchar(35) UNIQUE NOT NULL,longitude varchar(200) NOT NULL, estado varchar(2), muncipio varchar(100)",)
+  const ibge= await verificaTabela('coodmunicipio')
+  if(ibge==true){
+    return ibge
+  }
+}
+
+async function atualizaDadosIBGE(){
+  const dados= await verificaTabela('coodmunicipio')
+  if(dados== true){
+    const arquivo = toString(Ibge)
+    await Banco.session(arquivo)
+    return true
+  }
+}
+
 //Função Com Script para Deletar O Schema do banco de dados
   async function deletaschema(){
     await Banco.session("SELECT count(nspname) FROM pg_catalog.pg_namespace;")
@@ -289,4 +321,5 @@ async function userTeste(password) {
 
 
 
-module.exports = {verificaTabela, vendi, user, userTeste, conexao, deletaschema, pessoa, vendedor, categoria, anuncio, foto, telefone, endereco, entrega, formadepagamento, negociacao}
+
+module.exports = {verificaTabela, vendi, user, userTeste, conexao, deletaschema, pessoa, vendedor, categoria, anuncio, foto, telefone, endereco, entrega, formadepagamento, negociacao, ibge,atualizaDadosIBGE}

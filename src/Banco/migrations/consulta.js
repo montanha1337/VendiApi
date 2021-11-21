@@ -151,7 +151,6 @@ async function vendedor(token) {
 async function validaVendedor(token) {
   const idVendedor = Funcoes.verificajwt(token)
   var erro
-  var banco
   var token
   var vendedor
 

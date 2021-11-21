@@ -1,11 +1,9 @@
 import express from 'express'
-import multer from 'multer'
 import Funcao from './functions'
 import Banco from '../Banco/connect'
 import Cadastro from '../Banco/migrations/insert'
 import Consulta from '../Banco/migrations/consulta'
 
-  const parser = multer()
 const router = express.Router()
 
 
@@ -101,11 +99,11 @@ router.post('/redefinirSenha/:token', async (req, res, ) => {
         res.status(401).json({token:[]})
     }
 })
-router.post('/avatar',parser.single('imagem'), async (req, res, ) => {
+router.post('/avatar', async (req, res, ) => {
      
-     const file = req.file
+     const file = req.body.imagem
      var token = req.headers.authorization.replace(/^Bearer\s/, '')
-     await Cadastro.avatar(token,'https://venddiapi.herokuapp.com/user/uploads/'+file.filename)
+     await Cadastro.avatar(token,file)
      token = Funcao.atualizajwt(token) 
      if(token.status == false){
          console.log(token.mensagem)
@@ -122,7 +120,7 @@ router.post('/avatar',parser.single('imagem'), async (req, res, ) => {
 })
 router.get('/uploads/:id', async (req, res) => {
     var { id } = req.params
-    var filepath = `${process.cwd()}/uploads/avatar/${id}`
+    var filepath = 
         res.status(200).sendFile(filepath)
 });
 
