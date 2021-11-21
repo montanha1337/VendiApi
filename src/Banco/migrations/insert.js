@@ -65,9 +65,7 @@ async function vendedor(token,data) {
                              await Banco.session(`INSERT INTO vendi.anuncio(id_vendedor, id_categoria, titulo, descricao, valor,dataanuncio, classificacao, latitude, longitude) VALUES (${id_vendedor},${anuncio["categoria"]}, '${anuncio["titulo"]}', '${anuncio["descricao"]}', '${anuncio["valor"]}', '${anuncio["data"]}', ${anuncio["classificacao"]}, '${anuncio["latitude"]}', '${anuncio["longitude"]}');`)
       const novoAnuncio    = await Banco.session(`SELECT MAX(id_anuncio) FROM Vendi.anuncio`)
       const id_anuncio     = novoAnuncio.rows[0].max 
-      const imagem            = anuncio["file"]
-
-      const avatar         = imagemAnuncio(id_anuncio,imagem)
+      await imagemAnuncio(id_anuncio,anuncio["file"])
       return novoAnuncio.rows[0].max
     }
 }
