@@ -62,7 +62,7 @@ async function vendedor(token,data) {
       return erro
     }else{
       const {id_vendedor}  = await Consulta.vendedor(token)
-                             await Banco.session(`INSERT INTO vendi.anuncio(id_vendedor, id_categoria, titulo, descricao, valor,dataanuncio, classificacao, latitude, longitude)VALUES ('${id_vendedor},''${anuncio["categoria"]}', '${anuncio["titulo"]}', '${anuncio["descricao"]}', '${anuncio["valor"]}', '${anuncio["data"]}', '${anuncio["classificacao"]}', '${anuncio["latitude"]}', '${anuncio["longitude"]}');`)
+                             await Banco.session(`INSERT INTO vendi.anuncio(id_vendedor, id_categoria, titulo, descricao, valor,dataanuncio, classificacao, latitude, longitude) VALUES ('${id_vendedor},'${anuncio["categoria"]}', '${anuncio["titulo"]}', '${anuncio["descricao"]}', '${anuncio["valor"]}', '${anuncio["data"]}', '${anuncio["classificacao"]}', '${anuncio["latitude"]}', '${anuncio["longitude"]}');`)
       const novoAnuncio    = await Banco.session(`SELECT MAX(id_anuncio) FROM Vendi.anuncio`)
       const id_anuncio     = novoAnuncio.rows[0].max 
       const imagem            = anuncio["file"]
