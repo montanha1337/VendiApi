@@ -27,6 +27,8 @@ async function vendedor(token,data) {
         }
         return vendedor
       }
+      vendedor.resultado= await Consulta.vendedor(token)
+      return vendedor
     }
   }
   async function avatar(token,caminho) {
