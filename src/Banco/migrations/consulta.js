@@ -8,7 +8,7 @@ async function analizaLatitude(latitude, longitude) {
   dados.latitude=latitude[0]+latitude[1]+latitude[2]
   dados.longitude=longitude[0]+longitude[1]+longitude[2]
   console.log(dados)
-  dados.localizacao = await Banco.session(`select * from vendi.coodmunicipio m  where m.latitude like '${latitude}%' and longitude like '${longitude}%' order by id_coodmunicipio desc`)
+  dados.localizacao = await Banco.session(`select * from vendi.coodmunicipio m  where m.latitude like '${dados.latitude}%' and longitude like '${dados.longitude}%' order by id_coodmunicipio desc`)
   return dados
 }
 
