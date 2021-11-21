@@ -35,7 +35,7 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
 router.get('/testegeolocalizacao', async (req, res, ) => {
   const latitude = req.body.latitude
   const longitude = req.body.longitude
-  const result = Consulta.analizaLatitude(latitude, longitude)
+  const result = await Consulta.analizaLatitude(latitude, longitude)
   res.json(result)
 })
  // rota de deletar de banco de dados.
