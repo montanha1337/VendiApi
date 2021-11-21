@@ -35,6 +35,8 @@ router.post('/perfil', async (req, res, ) => {
 router.get('/anuncio/:categoria/:pagina', async (req, res, ) => {
     const { categoria } = req.params
     const { pagina } = req.params
+    const latitude = req.body.latitude
+    const longitude = req.body.longitude
     const anuncio = await Consulta.anuncio(categoria,pagina)
     if(anuncio.status == false){
         console.log(anuncio.mensagem)

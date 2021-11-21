@@ -1,6 +1,17 @@
 import Banco from '../connect'
 import Funcoes from '../../controller/functions'
 
+async function analizaLatitude(latitude, longitude) {
+  latitude = latitude.replace('.',' ')
+  latitude = latitude.replace('.',' ')
+  var dados = Object()
+  dados.latitude=latitude[0]
+  dados.longitude= longitude[0]
+  //dados.localizacao = await Banco.session(`select * from vendi.coodmunicipio m  where m.latitude='${latitude}' and longitude = '${longitude}' order by id_coodmunicipio desc`)
+  return dados
+}
+
+
 async function verificaUser(token) {
   const iduser     = Funcoes.verificajwt(token)
   if(iduser== false){
@@ -119,6 +130,7 @@ async function vendedor(token) {
         resultAnuncio.valor= parseFloat(anuncio.rows[0].valor)
         resultAnuncio.dataAnuncio= anuncio.rows[0].dataanuncio,
         resultAnuncio.linkfoto=anuncio.rows[0].linkfoto
+
           return [resultAnuncio]
         }
         const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
@@ -195,4 +207,4 @@ async function anuncioNegocicao(idAnuncio) {
   
 
 
-module.exports = {vendedor,cliente, pessoacpf, categoria,  perfil, anuncio, anuncioLista, selectTable, verificaUser, verificaVendedor, validaVendedor, fotoAnuncio, anuncioNegocicao}
+module.exports = {analizaLatitude,vendedor,cliente, pessoacpf, categoria,  perfil, anuncio, anuncioLista, selectTable, verificaUser, verificaVendedor, validaVendedor, fotoAnuncio, anuncioNegocicao}

@@ -25,10 +25,17 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
   }
     else{
       await Funcao.atualizaBanco()
+
       const texto= await Funcao.verificaconexao(2)
       res.json(texto)
     }
     
+})
+router.get('/testegeolocalizacao', async (req, res, ) => {
+  const latitude = req.body.latitude
+  const longitude = req.body.longitude
+  const result =analizaLatitude(latitude, longitude)
+  res.json(result)
 })
  // rota de deletar de banco de dados.
  router.get('/deletaBanco',async(req,res)=>{
