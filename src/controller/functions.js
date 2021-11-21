@@ -3,7 +3,6 @@ import Chave from '../Banco/connect'
 import Atualiza from '../Banco/migrations/database'
 import EnvioEmail from '../config/configemail'
 import bcrypt from 'bcrypt'
-import Math   from 'core-js/fn/math'
 
 var salt = bcrypt.genSaltSync(10)
 
