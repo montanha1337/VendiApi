@@ -5,10 +5,11 @@ async function analizaLatitude(latitude, longitude) {
   //latitude = latitude.replace('.',' ')
   //latitude = longitude.replace('.',' ')
   var dados = Object()
-  dados.latitude=latitude[0]+latitude[1]+latitude[2]
-  dados.longitude=longitude[0]+longitude[1]+longitude[2]
+  dados.latitude=latitude[0]+latitude[1]+latitude[2]+latitude[3]+latitude[4]
+  dados.longitude=longitude[0]+longitude[1]+longitude[2]+longitude[3]+longitude[4]
   console.log(dados)
-  dados.localizacao = await Banco.session(`select * from vendi.coodmunicipio m  where m.latitude like '${dados.latitude}%' and longitude like '${dados.longitude}%' order by id_coodmunicipio desc`)
+  dados.localizacao = await Banco.session(`select  from vendi.coodmunicipio m  where m.latitude like '${dados.latitude}%' and longitude like '${dados.longitude}%' order by id_coodmunicipio desc`)
+  dados.localizacao = dadoslocalizacao.rows
   return dados
 }
 
