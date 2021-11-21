@@ -78,7 +78,7 @@ async function cliente(token,data) {
     await Banco.session(`INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= ${user}),'${data["cpf"]}');`)
     const pessoa = await Banco.session(`select id_pessoa from Vendi.pessoa p where p.cpf= '${data["cpf"]}'`)
     await Banco.session(`INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= ${pessoa.rows[0].id_pessoa}),${data.telefone},${data["whatsapp"]});`)
-    await Banco.session(`INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= ${pessoa.rows[0].id_pessoa}),${data["rua"]},${data["bairro"]},${data["cidade"]},${data["numero"]},${data["cep"]});`)
+    await Banco.session(`INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= '${pessoa.rows[0].id_pessoa}'),'${data["rua"]}','${data["bairro"]}','${data["cidade"]}','${data["numero"]}','${data["cep"]}');`)
     const cliente = await Banco.session(`select p.id_pessoa, u.nome, p.cpf, t.telefone, e.cidade, t.whatsapp, e.rua, e.bairro, e.cidade, e.numero, e.cep  from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where p.cpf = ${data["cpf"]} `)
     if(cliente.rows[0]){
       return cliente.rows[0]
