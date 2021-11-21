@@ -21,7 +21,6 @@ async function vendedor(token,data) {
           vendedor.resultado= await Consulta.vendedor(token)
           console.log("---------------------------- Cadastro Vendedor"+vendedor)
           if(vendedor.resultado.rows[0]){
-            vendedor.status = true
             return vendedor
           }else{
             await vendedor(token, data)
