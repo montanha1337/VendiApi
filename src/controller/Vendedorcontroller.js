@@ -47,7 +47,7 @@ router.post('/Inserir', async (req, res, ) => {
             //    }
             //}else{
             //    tokenVenda = Funcao.gerajwt(result.resultado.id_vendedor)
-                res.status(401).json({token,tokenVenda,result})
+            //   res.status(401).json({token,tokenVenda,result})
            // }
         }
     }
