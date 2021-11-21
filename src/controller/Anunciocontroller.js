@@ -36,7 +36,7 @@ router.post('/inserir', async (req, res, next) => {
     anuncio.descricao = req.body.descricao
     anuncio.valor = req.body.valorVenda
     anuncio.classificacao = 2
-    anuncio.data = new Date(ano, mês, dia, hora, minuto, segundo, milissegundo);
+    anuncio.data = new Date().now();
     anuncio.latitude = req.body.latitude
     anuncio.longitude = req.body.longitude
     console.log(anuncio)
