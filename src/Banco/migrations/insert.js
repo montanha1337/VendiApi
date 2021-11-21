@@ -75,7 +75,7 @@ async function cliente(token,data) {
     const erro = Funcoes.padraoErro("não foi possivel identificar o usuario da requisição")
     return erro
   }else{
-    await Banco.session(`INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= ${user}),${data["cpf"]});`)
+    await Banco.session(`INSERT INTO vendi.pessoa(id_user, cpf) VALUES ((select id_user from Vendi.user u where u.id_user= ${user}),'${data["cpf"]}');`)
     const pessoa = await Banco.session(`select id_pessoa from Vendi.pessoa p where p.cpf= '${data["cpf"]}'`)
     await Banco.session(`INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= ${pessoa.rows[0].id_pessoa}),${data.telefone},${data["whatsapp"]});`)
     await Banco.session(`INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES ((select id_pessoa from Vendi.pessoa p where p.id_pessoa= ${pessoa.rows[0].id_pessoa}),${data["rua"]},${data["bairro"]},${data["cidade"]},${data["numero"]},${data["cep"]});`)
