@@ -6,7 +6,6 @@ import Delete from '../Banco/migrations/deletar'
 import Editar from '../Banco/migrations/editar'
 
 const router = express.Router()
-
 router.post('/Inserir', async (req, res, ) => {
     var data = new Object()
     data.cpf=req.body.cpf
@@ -36,15 +35,16 @@ router.post('/Inserir', async (req, res, ) => {
         }else{
             result = await Cadastro.vendedor(token,data)
             if(result.status== false){
-                if(result.resultado.result.id_vendedor== null){
-                   console.log("Erro: não é vendedor")
+                console.log(result)
+                if(result.id_vendedor== null){
+                    console.log("Erro: não é vendedor")
                     res.status(200).json({token,tokenVenda:null,result})
                 }else{
-                    tokenVenda = Funcao.gerajwt(result.resultado.id_vendedor)
+                    tokenVenda = Funcao.gerajwt(result.id_vendedor)
                     res.status(200).json({token,tokenVenda,result})
                 }
             }else{
-                tokenVenda = Funcao.gerajwt(result.resultado.id_vendedor)
+                tokenVenda = Funcao.gerajwt(result.id_vendedor)
                 res.status(401).json({token,tokenVenda,result})
             }
         }
