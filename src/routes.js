@@ -10,7 +10,7 @@ import Negociacao from './controller/NegociacaoController'
 const routes = new Router();
 //olhar o final da rota 
 //web
-routes.use('/',(req,res)=>{ res.sendfile(__dirname+'/web/PaginaErro.html')})
+routes.use('/1',(req,res)=>{ res.sendfile(__dirname+'/web/PaginaErro.html')})
 //Api
 
 routes.use('/desenvolvimento',Dev) //Rota com ferramentas para auxiliar o frontend e demais areas
