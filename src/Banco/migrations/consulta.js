@@ -83,7 +83,7 @@ async function vendedor(token) {
           return erro
         }else{
           pessoa = Banco.session(`select p.cpf from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where p.cpf = '${cpf}' `)
-          if(pessoa.rows[0].cpf){
+          if(pessoa.rows == null){
             const erro = Funcoes.padraoErro('Cpf já existe para o usuário.')  
             erro.status = true
             return erro
