@@ -150,7 +150,7 @@ async function verificaconexao(mensagem){
 
     function distanciaLatLong(lat1, long1, lat2, long2)
     {    
-  
+        console.log("entrou aqui:"+ lat1+ long1+ lat2+long2)
         //radians
         lat1 = (lat1 * 2.0 * Math.PI) / 60.0 / 360.0;      
         long1 = (long1 * 2.0 * Math.PI) / 60.0 / 360.0;    
