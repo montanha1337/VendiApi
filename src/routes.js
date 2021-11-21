@@ -6,12 +6,11 @@ import Anuncio from './controller/Anunciocontroller'
 import Home from './controller/HomeController'
 import Cliente from './controller/ClienteController'
 import Negociacao from './controller/NegociacaoController'
-import Web        from './web/WebController'
 
 const routes = new Router();
 //olhar o final da rota 
 //web
-routes.use('/web',Web)
+routes.use('/', res.sendfile(__dirname+'/web/PaginaErro.html'))
 //Api
 
 routes.use('/desenvolvimento',Dev) //Rota com ferramentas para auxiliar o frontend e demais areas
