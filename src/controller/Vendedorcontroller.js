@@ -35,7 +35,7 @@ router.post('/Inserir', async (req, res, ) => {
             res.status(401).json({token:null,tokenVenda:null,result:null})
         }else{
             result = await Cadastro.vendedor(token,data)
-            console.log(result)
+            console.log({vendedor:result})
             //if(result.status== false){
             //    console.log(result)
            //     if(result.id_vendedor== null){
