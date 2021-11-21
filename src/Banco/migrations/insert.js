@@ -18,8 +18,8 @@ async function vendedor(token,data) {
           await Banco.session(`INSERT INTO vendi.telefone(id_pessoa, telefone,whatsapp) VALUES (${pessoa.rows[0].id_pessoa},${data.telefone},${data["whatsapp"]});`)
           await Banco.session(`INSERT INTO vendi.endereco(id_pessoa,rua,bairro,cidade,numero, cep) VALUES (${pessoa.rows[0].id_pessoa},${data["rua"]},${data["bairro"]},${data["cidade"]},${data["numero"]},${data["cep"]});`)
           await Banco.session(`INSERT INTO vendi.vendedor(id_pessoa,classificacao) VALUES (${pessoa.rows[0].id_pessoa},${data["classificacao"]});`)
-          vendedor.resultado= await Consulta.vendedor(token)
-          if(vendedor.resultado.rows[0]){
+          vendedor= await Consulta.vendedor(token)
+          if(vendedor.rows[0]){
             return vendedor
           }else{
             await vendedor(token, data)
@@ -27,7 +27,7 @@ async function vendedor(token,data) {
         }
         return vendedor
       }
-      vendedor.resultado= await Consulta.vendedor(token)
+      vendedor= await Consulta.vendedor(token)
       return vendedor
     }
   }

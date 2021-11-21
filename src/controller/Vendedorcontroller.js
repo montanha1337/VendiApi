@@ -35,20 +35,18 @@ router.post('/Inserir', async (req, res, ) => {
             res.status(401).json({token:null,tokenVenda:null,result:null})
         }else{
             result = await Cadastro.vendedor(token,data)
-            console.log({vendedor:result})
-            //if(result.status== false){
-            //    console.log(result)
-           //     if(result.id_vendedor== null){
-           //         console.log("Erro: não é vendedor")
-           //         res.status(200).json({token,tokenVenda:null,result})
-            //    }else{
-            //        tokenVenda = Funcao.gerajwt(result.resultado.id_vendedor)
+            if(result.status== false){
+                if(result.resultado.result.id_vendedor== null){
+                   console.log("Erro: não é vendedor")
+                    res.status(200).json({token,tokenVenda:null,result})
+                }else{
+                    tokenVenda = Funcao.gerajwt(result.resultado.id_vendedor)
                     res.status(200).json({token,tokenVenda,result})
-            //    }
-            //}else{
-            //    tokenVenda = Funcao.gerajwt(result.resultado.id_vendedor)
-            //   res.status(401).json({token,tokenVenda,result})
-           // }
+                }
+            }else{
+                tokenVenda = Funcao.gerajwt(result.resultado.id_vendedor)
+                res.status(401).json({token,tokenVenda,result})
+            }
         }
     }
 })
