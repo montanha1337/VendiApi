@@ -19,6 +19,7 @@ async function vendedor(token,data) {
           await Banco.session(`INSERT INTO vendi.vendedor(id_pessoa,classificacao) VALUES (${pessoa.rows[0].id_pessoa},${data["classificacao"]});`)
           vendedor= await Consulta.vendedor(token)
           if(vendedor.rows[0]){
+            vendedor.status = true
             return vendedor
           }else{
             await vendedor(token, data)
