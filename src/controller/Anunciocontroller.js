@@ -38,12 +38,11 @@ router.post('/inserir', async (req, res, next) => {
     anuncio.classificacao = 2
      const data = new Date();
     const dia = data.getDate()
-    const mes = data.getMonth()
+    const mes = data.getMonth()+1
     const ano = data.getFullYear()
     anuncio.data =(dia+'/'+mes+'/'+ano)
     anuncio.latitude = req.body.latitude
     anuncio.longitude = req.body.longitude
-    console.log(anuncio)
     const token1 = req.headers.authorization.replace(/^Bearer\s/, '');
     const token = Funcao.atualizajwt(token1)
     if (token.status == false) {

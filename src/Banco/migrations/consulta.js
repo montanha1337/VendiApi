@@ -6,7 +6,6 @@ async function analizaLatitude(latitude, longitude) {
   dados.latitude=latitude[0]+latitude[1]+latitude[2]+latitude[3]+latitude[4]
   dados.longitude=longitude[0]+longitude[1]+longitude[2]+longitude[3]+longitude[4]
   dados.localizacao = await Banco.session(`select m.latitude, m.longitude, m.municipio from vendi.coodmunicipio m  where m.latitude like '${dados.latitude}%' and longitude like '${dados.longitude}%' order by id_coodmunicipio desc`)
-  console.log("---------------------------------"+dados.localizacao.rows[0])
   dados.distancia = Funcoes.distanciaLatLong(latitude, longitude, dados.localizacao.rows[0].latitude, dados.localizacao.rows[0].longitude)
   dados.localizacao = dados.localizacao.rows[0]
   return dados
@@ -124,10 +123,9 @@ async function vendedor(token) {
     var dados = Object()
     dados.latitude=latitude[0]+latitude[1]+latitude[2]+latitude[3]+latitude[4]
     dados.longitude=longitude[0]+longitude[1]+longitude[2]+longitude[3]+longitude[4]
-      const anuncio = await Banco.session(`select a.id_anuncio,u.nome as vendedor, e.cidade,a.id_categoria, a.titulo, a.descricao, cast( a.valor as numeric) as valor, a.dataanuncio, a.classificacao, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_categoria = ${categoria} and a.latitude like '${dados.latitude}%' and longitude like '${dados.longitude}%' LIMIT 10 OFFSET(${pagina} - 1) * 10`)
+      const anuncio = await Banco.session(`select a.id_anuncio,u.nome as vendedor, e.cidade,a.id_categoria, a.titulo, a.descricao, cast( a.valor as numeric) as valor, a.dataanuncio, a.classificacao, f.linkfoto from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor= a.id_vendedor left outer join Vendi.pessoa p on p.id_pessoa= v.id_pessoa left outer join Vendi.endereco e on e.id_pessoa = v.id_pessoa left outer join Vendi.user   u   on u.id_user = p.id_user left outer join Vendi.foto f on f.id_anuncio = a.id_anuncio where a.id_categoria = ${categoria} and a.latitude like '${latitude}%' and a.longitude like ' ${longitude}%' LIMIT 10 OFFSET(${pagina} - 1) * 10`)
 
       if(anuncio.rows[0]){
-
           return anuncio.rows
         }
         const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
@@ -146,7 +144,7 @@ async function vendedor(token) {
         resultAnuncio.descricao= anuncio.rows[0].descricao
         resultAnuncio.valor= parseFloat(anuncio.rows[0].valor)
         resultAnuncio.dataAnuncio= anuncio.rows[0].dataanuncio,
-        resultAnuncio.linkfoto=anuncio.rows[0].linkfoto
+        resultAnuncio.linkfoto = anuncio.rows[0].linkfoto
         resultAnuncio.distancia = Funcoes.distanciaLatLong(latitude, longitude, anuncio.rows[0].latitude,anuncio.rows[0].longitude)
 
           return [resultAnuncio]
