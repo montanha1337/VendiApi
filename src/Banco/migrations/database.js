@@ -288,7 +288,7 @@ async function userTeste(password) {
 }
 
 async function ibge(){
-  await Banco.session("CREATE TABLE Vendi.coodmunicipio (id_municipio SERIAL CONSTRAINT pk_id_municipio PRIMARY KEY,codigoibge integer NOT NULL, latitude varchar(35) UNIQUE NOT NULL,longitude varchar(200) NOT NULL, estado varchar(2), muncipio varchar(100)",)
+  await Banco.session("CREATE TABLE Vendi.coodmunicipio (id_coodmunicipio SERIAL CONSTRAINT pk_id_coodmunicipio PRIMARY KEY,codigoibge integer NOT NULL, latitude varchar(35) UNIQUE NOT NULL,longitude varchar(200) NOT NULL, estado varchar(2), muncipio varchar(100)",)
   const ibge= await verificaTabela('coodmunicipio')
   if(ibge==true){
     await atualizaDadosIBGE()
