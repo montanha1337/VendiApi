@@ -76,6 +76,7 @@ router.post('/editar', async (req, res, ) => {
         res.status(401).json({token:null,result:null})
     }else{
         const compare = await Consulta.cliente(token)
+        console.log(compare)
         var result = await Editar.atualizaCliente('pessoa','cpf',data['cpf'],compare.cpf)
         result  = await Editar.atualizaCliente('user','nome',data['nome'],compare.nome)
         result  = await Editar.atualizaCliente('telefone','telefone',data['telefone'],compare.telefone)
