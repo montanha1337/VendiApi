@@ -4,6 +4,7 @@ import Funcao   from  './functions'
 import Database from  '../Banco/migrations/database'
 import Delete from '../Banco/migrations/deletar'
 import Editar from '../Banco/migrations/editar'
+import Consulta from '../Banco/migrations/consulta'
 
 
 const router = express.Router()
@@ -34,7 +35,7 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
 router.get('/testegeolocalizacao', async (req, res, ) => {
   const latitude = req.body.latitude
   const longitude = req.body.longitude
-  const result =analizaLatitude(latitude, longitude)
+  const result = Consulta.analizaLatitude(latitude, longitude)
   res.json(result)
 })
  // rota de deletar de banco de dados.
