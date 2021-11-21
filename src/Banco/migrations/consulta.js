@@ -2,11 +2,11 @@ import Banco from '../connect'
 import Funcoes from '../../controller/functions'
 
 async function analizaLatitude(latitude, longitude) {
-  latitude = latitude.replace('.',' ')
-  latitude = latitude.replace('.',' ')
+  //latitude = latitude.replace('.',' ')
+  //latitude = longitude.replace('.',' ')
   var dados = Object()
-  dados.latitude=latitude
-  dados.longitude=longitude
+  dados.latitude=latitude[0]+latitude[1]+latitude[2]
+  dados.longitude=longitude[0]+longitude[1]+longitude[2]
   console.log(dados)
   //dados.localizacao = await Banco.session(`select * from vendi.coodmunicipio m  where m.latitude='${latitude}' and longitude = '${longitude}' order by id_coodmunicipio desc`)
   return dados
