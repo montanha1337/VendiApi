@@ -40,7 +40,7 @@ router.post('/inserir', async (req, res, next) => {
     const dia = data.getDate()
     const mes = data.getMonth()
     const ano = data.getFullYear()
-    anuncio.data =new Date(dia,mes,ano);
+    anuncio.data =(dia+'/'+mes+'/'+ano)
     anuncio.latitude = req.body.latitude
     anuncio.longitude = req.body.longitude
     console.log(anuncio)
