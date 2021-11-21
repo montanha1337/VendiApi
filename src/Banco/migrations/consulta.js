@@ -212,7 +212,7 @@ async function anuncioNegocicao(idAnuncio) {
   var anuncio = await Banco.session(`select a.titulo, t.telefone from Vendi.anuncio a left outer join Vendi.vendedor v on v.id_vendedor = a.id_vendedor left outer join Vendi.telefone t on t.id_pessoa = v.id_pessoa where a.id_anuncio = ${idAnuncio} and t.whatsapp = 'true'`)
   if(anuncio.rows[0]){
     var anuncios = Object()
-    anuncios.descricao = "O%20item%20"+anuncio.rows[0].titulo.replace(' ', '%20')+ "%20ainda%20está%20a%20venda?"
+    anuncios.descricao = "O%20item%20"+anuncio.rows[0].titulo.replace(' ', '%20')+ "%20ainda%20está%20a%20venda%20?"
     anuncios.telefone = anuncio.rows[0].telefone
     return anuncios
   }
