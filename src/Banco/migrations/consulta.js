@@ -38,7 +38,7 @@ async function vendedor(token) {
       vendedor.result = await Banco.session(`select v.id_vendedor, u.nome, p.cpf, t.telefone, e.cidade, t.whatsapp, e.rua, e.bairro, e.cidade, e.numero, e.cep, v.classificacao from Vendi.user u left outer join Vendi.pessoa   p on p.id_user=   u.id_user left outer join Vendi.telefone t on t.id_pessoa= p.id_pessoa left outer join Vendi.endereco e on e.id_pessoa= p.id_pessoa left outer join Vendi.vendedor v on v.id_pessoa= p.id_pessoa where u.id_user = ${user}`)
       if(vendedor.result.rows[0]){
         vendedor.status = true
-        vendedor.result = vendedor.result.rows[0]
+        vendedor.result = vendedor.result.rows
         return vendedor      
       }
       const erro = Funcoes.padraoErro("não foi encontrado resultados na base de dados")
