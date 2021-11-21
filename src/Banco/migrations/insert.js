@@ -1,7 +1,6 @@
 import Banco from '../connect'
 import Funcoes from '../../controller/functions'
 import Consulta from './consulta'
-import { INTEGER } from 'sequelize/types'
 
 async function vendedor(token,data) {
   var pessoa
