@@ -35,10 +35,11 @@ router.post('/inserir', async (req, res, next) => {
     anuncio.titulo = req.body.titulo
     anuncio.descricao = req.body.descricao
     anuncio.valor = req.body.valorVenda
-    anuncio.classificacao = req.body.classificacao
+    anuncio.classificacao = 2
     anuncio.data = new Date();
     anuncio.latitude = req.body.latitude
     anuncio.longitude = req.body.longitude
+    console.log(anuncio)
     const token1 = req.headers.authorization.replace(/^Bearer\s/, '');
     const token = Funcao.atualizajwt(token1)
     if (token.status == false) {
