@@ -12,7 +12,7 @@ router.get('/whatsapp/:id', async (req, res) => {
     
     var whatsapp = await Consulta.anuncioNegocicao(id)
     text= text.replace(" ", "%20")
-    res.json(`https://wa.me/55${whatsapp.telefone}?text=${whatsapp.descricao}`)
+    res.redirect(`https://wa.me/55${whatsapp.telefone}?text=${whatsapp.descricao}`)
 });
 
 
