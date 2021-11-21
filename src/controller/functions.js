@@ -162,4 +162,4 @@ async function verificaconexao(mensagem){
       }
 
 
-module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, atualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf}
+module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, atualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf,distanciaLatLong}
