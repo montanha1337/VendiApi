@@ -20,12 +20,12 @@ router.get('/testeConexaoBanco', async (req, res, ) => {
     const result = await Banco.session("select exists (select * from pg_catalog.pg_namespace where nspname = 'vendi');")
     if(result.rows[0].exists=false){
       await Funcao.criaBancoPadrao()
-      const conexao = await Funcao.verificaconexao(2)
+      const conexao = await Funcao.verificaconexao(5)
       res.json(conexao)
   }
     else{
       await Funcao.atualizaBanco()
-      const texto= await Funcao.verificaconexao(1)
+      const texto= await Funcao.verificaconexao(2)
       res.json(texto)
     }
     
