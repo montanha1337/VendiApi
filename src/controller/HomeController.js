@@ -32,7 +32,7 @@ router.post('/perfil', async (req, res, ) => {
         }
     }
 })
-router.get('/anuncio/:categoria/:pagina', async (req, res, ) => {
+router.post('/anuncio/:categoria/:pagina', async (req, res, ) => {
     const { categoria } = req.params
     const { pagina } = req.params
     const latitude = req.body.latitude
