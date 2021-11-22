@@ -37,6 +37,7 @@ router.get('/anuncio/:categoria/:pagina', async (req, res, ) => {
     const { pagina } = req.params
     const latitude = req.body.latitude
     const longitude = req.body.longitude
+    if(latitude && longitude){
     const anuncio = await Consulta.anuncio(categoria,pagina,latitude,longitude)
     if(anuncio.status == false){
         console.log(anuncio.mensagem)
@@ -44,6 +45,9 @@ router.get('/anuncio/:categoria/:pagina', async (req, res, ) => {
     }else{
         res.status(200).json({anuncio})
     }
+}else{
+    res.status(400).json("Erro ao buscar por localização")
+}
 })
 
 
