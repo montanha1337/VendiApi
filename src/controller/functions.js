@@ -179,4 +179,4 @@ async function verificaconexao(mensagem){
       }
 
 
-module.exports = {padraoErro,mediaClassificacao, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, atualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf,distanciaLatLong}
+module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, atualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf,distanciaLatLong}

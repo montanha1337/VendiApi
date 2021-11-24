@@ -19,6 +19,7 @@ router.post('/Inserir', async (req, res, ) => {
     data.cep=req.body.cep
     var result
     const token1=req.headers.authorization.replace(/^Bearer\s/, '');
+    console.log({data: data,token: token1})
     const token = Funcao.atualizajwt(token1) 
     if(token.status== false){
         console.log(token.mensagem)
