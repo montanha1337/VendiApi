@@ -13,6 +13,7 @@ function padraoErro(mensagem){
     return erro
 }
 
+
 function gerajwt(iduser){
     const token = Jwt.sign({iduser}, Chave.secreto, {expiresIn: "30 days" });
     return token
@@ -178,4 +179,4 @@ async function verificaconexao(mensagem){
       }
 
 
-module.exports = {padraoErro, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, atualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf,distanciaLatLong}
+module.exports = {padraoErro,mediaClassificacao, gerajwt, verificajwt,atualizajwt, criaBancoPadrao, atualizaBanco, verificaconexao, enviaremail,cripto, compare, gerajwtsenha, verificatokensenha,validacpf,distanciaLatLong}

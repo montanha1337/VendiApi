@@ -85,6 +85,20 @@ router.delete('/deletar/:id', async (req, res,) => {
     }
 
 })
+
+router.put('/classificar/', async (req, res, ) => {
+    
+    const idAnuncio=req.body.idAnuncio
+    var classificacao = req.body.classificacao
+        classificacao= await Editar.mediaClassificacaoAnuncio(idAnuncio,classificacao)
+        if(classificacao.status == false){
+            console.log(classificacao.mensagem)
+            res.status(401).json({classificacao:null})
+        }else{
+    res.status(200).json({classificacao})
+        }
+})
+
 router.delete('/deletarfoto/:id', async (req, res,) => {
     const idfoto = req.params.id
     var foto = await Consulta.selectTable('foto','linkfoto','id_foto', idfoto)
