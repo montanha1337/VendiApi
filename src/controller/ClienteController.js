@@ -20,6 +20,7 @@ router.post('/Inserir', async (req, res, ) => {
     var result
     const token1=req.headers.authorization.replace(/^Bearer\s/, '');
     console.log({data: data,token: token1})
+    if(data){
     const token = Funcao.atualizajwt(token1) 
     if(token.status== false){
         console.log(token.mensagem)
@@ -45,6 +46,9 @@ router.post('/Inserir', async (req, res, ) => {
             }
         }
     }
+}else{
+    res.status(502).json(data)
+}
 })
 router.get('/buscar', async (req, res, ) => {
     
