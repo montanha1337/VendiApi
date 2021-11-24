@@ -41,7 +41,7 @@ router.post('/Inserir', async (req, res, ) => {
                     res.status(200).json({token,result})
                 }
             }else{
-                res.status(401).json({token,result})
+                res.status(200).json({token,result})
             }
         }
     }
